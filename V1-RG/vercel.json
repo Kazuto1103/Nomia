@@ -1,5 +1,9 @@
 {
-    "cleanUrls": true,
+    "functions": {
+        "backend/main.py": {
+            "runtime": "@vercel/python"
+        }
+    },
     "rewrites": [
         {
             "source": "/assets/(.*)",
@@ -12,6 +16,14 @@
         {
             "source": "/command",
             "destination": "/backend/main.py"
+        },
+        {
+            "source": "/live.html",
+            "destination": "/frontend/live.html"
+        },
+        {
+            "source": "/mock.html",
+            "destination": "/frontend/mock.html"
         },
         {
             "source": "/",
