@@ -1,9 +1,5 @@
 {
-    "functions": {
-        "backend/main.py": {
-            "runtime": "@vercel/python"
-        }
-    },
+    "cleanUrls": true,
     "rewrites": [
         {
             "source": "/assets/(.*)",
@@ -11,11 +7,11 @@
         },
         {
             "source": "/ws",
-            "destination": "/backend/main.py"
+            "destination": "/api/main.py"
         },
         {
             "source": "/command",
-            "destination": "/backend/main.py"
+            "destination": "/api/main.py"
         },
         {
             "source": "/live.html",
