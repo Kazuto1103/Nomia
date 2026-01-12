@@ -1,5 +1,4 @@
 {
-    "cleanUrls": true,
     "rewrites": [
         {
             "source": "/assets/(.*)",
@@ -7,11 +6,11 @@
         },
         {
             "source": "/ws",
-            "destination": "/api/main.py"
+            "destination": "/api/index.py"
         },
         {
             "source": "/command",
-            "destination": "/api/main.py"
+            "destination": "/api/index.py"
         },
         {
             "source": "/live.html",
@@ -20,6 +19,10 @@
         {
             "source": "/mock.html",
             "destination": "/frontend/mock.html"
+        },
+        {
+            "source": "/index.html",
+            "destination": "/frontend/index.html"
         },
         {
             "source": "/",
