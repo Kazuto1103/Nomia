@@ -96,9 +96,9 @@
             bottom: 40px;
             left: 40px;
             display: flex;
-            flex-direction: column;
-            /* Stacking them vertically */
-            align-items: center;
+            flex-direction: row;
+            /* Side by side */
+            align-items: flex-start;
             gap: 1.5rem;
             z-index: 100;
         }
@@ -106,13 +106,13 @@
         .proto-line-container {
             position: relative;
             width: 1px;
-            height: 120px;
+            height: 180px;
+            /* Full height to match vertical text */
         }
 
         .proto-line-main {
             position: absolute;
             top: 0;
-            /* Changed from bottom to top since it's below text */
             left: 0;
             width: 1px;
             height: 100%;
@@ -137,12 +137,12 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            opacity: 0.3;
+            opacity: 0.2;
         }
 
         .proto-segment {
             width: 1px;
-            height: 20px;
+            height: 30px;
             background: #fff;
         }
 
@@ -284,22 +284,22 @@
 
     <!-- Bottom Left HUD -->
     <div class="proto-branding">
-        <div class="flex flex-col items-center">
-            <div class="text-[0.4rem] tracking-[0.3em] opacity-10 mb-4 vertical-text">SEC_SERIAL_ID</div>
-            <div class="text-[10px] font-black tracking-[0.6em] text-white vertical-text h-[180px]">
-                <div class="flex flex-col items-center">
-                    <span x-text="typewriter"></span>
-                    <span class="w-[1px] h-3 bg-white mt-1 animate-pulse"
-                        :class="typewriter.length === fullText.length ? 'opacity-0' : 'opacity-100'"></span>
-                </div>
-            </div>
-        </div>
         <div class="proto-line-container">
             <div class="proto-line-main"></div>
             <div class="proto-dot"></div>
             <div class="proto-segments">
                 <div class="proto-segment"></div>
                 <div class="proto-segment"></div>
+            </div>
+        </div>
+        <div class="flex flex-col pt-1">
+            <div class="text-[0.4rem] tracking-[0.3em] opacity-10 mb-4 vertical-text">SEC_SERIAL_ID</div>
+            <div class="text-[10px] font-black tracking-[0.6em] text-white vertical-text h-[180px]">
+                <div class="flex flex-col items-start">
+                    <span x-text="typewriter"></span>
+                    <span class="w-[1px] h-3 bg-white mt-1 animate-pulse"
+                        :class="typewriter.length === fullText.length ? 'opacity-0' : 'opacity-100'"></span>
+                </div>
             </div>
         </div>
     </div>
