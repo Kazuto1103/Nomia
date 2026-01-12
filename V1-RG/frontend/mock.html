@@ -26,10 +26,15 @@
 
         .terminal-panel {
             border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(12px) saturate(180%);
             box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glow-panel {
+            border-color: rgba(255, 255, 255, 0.8) !important;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1), 0 0 1px 0.5px rgba(255, 255, 255, 0.5);
         }
 
         .terminal-panel:hover {
@@ -105,14 +110,65 @@
             animation: pulse 1.5s infinite;
         }
 
+        .invert-logic {
+            background-color: var(--primary) !important;
+            color: var(--bg) !important;
+            border-color: var(--primary) !important;
+        }
+
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease-out;
+            pointer-events: none;
+        }
+
+        .loading-bar-container {
+            width: 150px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: repeating-linear-gradient(90deg, #fff 0, #fff 10px, transparent 10px, transparent 12px);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            transition: width 2.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
     </style>
 </head>
 
 <body x-data="v1rg_mock()">
     <div class="overlay scanlines"></div>
+
+    <!-- Cinematic Loading Overlay -->
+    <div class="loading-overlay" :class="isLoading ? 'opacity-100' : 'opacity-0'">
+        <div class="text-xs font-bold tracking-[0.5em] animate-pulse">ESTABLISHING_SIMULATION...</div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" :style="isLoading ? 'width: 100%' : 'width: 0%'"></div>
+        </div>
+        <div class="text-[8px] opacity-40 mt-2 tracking-widest">LOADING_MOCK_CORE</div>
+    </div>
     <!-- Internal Mock Video Fallback -->
     <!-- Cinematic Dual-Video Crossfade Engine -->
     <video id="bg-video-1" class="opacity-100" muted playsinline autoplay>
@@ -123,8 +179,8 @@
     </video>
 
     <div class="relative z-10 h-screen flex flex-col p-6 space-y-2 overflow-hidden">
-        <header class="flex-shrink-0 flex justify-between items-end">
-            <!-- New Mega Title Branding -->
+        <header class="flex-shrink-0 flex justify-between items-start text-white">
+            <!-- Mega Title Branding -->
             <div class="flex items-end gap-8">
                 <div class="flex flex-col">
                     <div class="text-[0.5rem] tracking-[1em] opacity-30 mb-1 ml-1">AUTONOMOUS-PROJECT</div>
@@ -135,27 +191,37 @@
 
                 <div class="space-y-3 mb-1">
                     <div class="flex items-center gap-4">
-                        <span class="text-lg font-black tracking-[0.2em] text-white">V1-RG // MOCKUP</span>
+                        <span class="text-lg font-black tracking-[0.2em]">V1-RG // SIMULATION</span>
                         <div class="w-12 h-[1px] bg-white/20"></div>
                     </div>
                     <div class="flex gap-3">
-                        <span class="status-tag text-green-500 border-green-500">[ SYSTEM_STATE: ACTIVE_MOCK ]</span>
+                        <span class="status-tag text-green-500 border-green-500">[ STATUS: ACTIVE ]</span>
                         <span class="status-tag text-yellow-500 border-yellow-500">[ MODE: SIMULATION ]</span>
-                        <a href="index.html"
-                            class="status-tag border-white/20 hover:bg-white hover:text-black transition-all">EXIT_MOCKUP
-                            [X]</a>
                     </div>
                 </div>
             </div>
-            <div class="flex gap-6">
-                <div class="text-right">
-                    <div class="text-[8px] opacity-40 mb-1 tracking-widest">MOCK_THERMAL</div>
-                    <div class="text-2xl font-bold font-mono"><span x-text="telemetry.cpu_temp"></span>°C</div>
-                </div>
-                <div class="w-[1px] h-10 bg-white/20"></div>
-                <div class="text-right">
-                    <div class="text-[8px] opacity-40 mb-1 tracking-widest">MOCK_UPTIME</div>
-                    <div class="text-2xl font-bold font-mono"><span x-text="telemetry.uptime"></span></div>
+
+            <!-- Unified Navigation HUD -->
+            <div class="flex flex-col items-end gap-4">
+                <nav class="flex gap-2 text-white">
+                    <a href="mock.html" class="status-tag invert-logic">[01: TERMINAL]</a>
+                    <a href="data.html"
+                        class="status-tag border-white/20 hover:bg-white hover:text-black transition-all">[02:
+                        DATA_MATRX]</a>
+                    <a href="index.html"
+                        class="status-tag border-red-500/50 text-red-500 hover:bg-red-500 hover:text-black transition-all">[03:
+                        SYS_EXIT]</a>
+                </nav>
+                <div class="flex gap-6 text-white">
+                    <div class="text-right">
+                        <div class="text-[8px] opacity-40 mb-1 tracking-widest">MOCK_THERMAL</div>
+                        <div class="text-2xl font-bold font-mono"><span x-text="telemetry.cpu_temp"></span>°C</div>
+                    </div>
+                    <div class="w-[1px] h-10 bg-white/20"></div>
+                    <div class="text-right">
+                        <div class="text-[8px] opacity-40 mb-1 tracking-widest">MOCK_UPTIME</div>
+                        <div class="text-2xl font-bold font-mono"><span x-text="telemetry.uptime"></span></div>
+                    </div>
                 </div>
             </div>
         </header>
@@ -181,7 +247,7 @@
                         class="absolute inset-4 border border-white/10 rounded-full animate-spin [animation-duration:15s] direction-reverse">
                     </div>
                     <div class="text-center z-10">
-                        <div class="text-[8px] tracking-[1em] opacity-50 mb-2">STATUS</div>
+                        <div class="text-[8px] tracking-[1em] opacity-50 mb-2">STATE</div>
                         <div class="text-2xl font-black tracking-tighter px-6 py-2 border border-white"
                             x-text="telemetry.mode"></div>
                     </div>
@@ -250,6 +316,7 @@
                     'rm -rf /tmp/stale-cache', 'ping 192.168.1.50 -c 4', 'df -h | grep /dev/sda1',
                     'chmod +x ./drivers/motor_controller', 'tail -f /var/log/syslog', 'sensors | grep Core'
                 ],
+                isLoading: false,
                 mock_states: [
                     { mode: 'PATROL_ACTIVE', dist: 350, temp: 48, logs: ['[SYS] PATROL_UNIT_01_ENGAGED', '[NAV] CALCULATING_GRID_8', '[SNR] OBSTACLE_CLEAR'] },
                     { mode: 'EMERGENCY_HALT', dist: 42, temp: 65, logs: ['[CRT] COLLISION_AVOIDANCE', '[SYS] EMERGENCY_STOP', '[SNR] DISTANCE_ALERT'] },
@@ -258,6 +325,12 @@
                 startTime: Date.now(),
                 lastStateIndex: -1,
                 init() {
+                    // Start Loading Sequence
+                    this.isLoading = true;
+                    setTimeout(() => {
+                        this.isLoading = false;
+                    }, 2500);
+
                     // Telemetry Loop
                     setInterval(() => {
                         const stateIndex = Math.floor((Date.now() - this.startTime) / 5000) % 3;
