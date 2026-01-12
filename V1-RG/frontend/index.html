@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOMIA // SYSTEM_PORTAL_v1.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'JetBrains Mono', monospace;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .portal-container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            width: 100%;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .hex-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at center, transparent 30%, #000 90%),
+                url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .title {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: 0.3em;
+            margin-bottom: 2rem;
+            animation: glitch-text 4s infinite;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .select-card {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 3rem 2rem;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .select-card:hover {
+            border-color: #fff;
+            background: rgba(255, 255, 255, 1);
+            color: #000;
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(255, 255, 255, 0.2);
+        }
+
+        .select-card::before {
+            content: 'READY';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.6rem;
+            opacity: 0.5;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-desc {
+            font-size: 0.7rem;
+            opacity: 0.6;
+            letter-spacing: 0.1em;
+        }
+
+        @keyframes glitch-text {
+
+            0%,
+            90%,
+            100% {
+                transform: skew(0);
+            }
+
+            91% {
+                transform: skew(10deg);
+                filter: invert(1);
+            }
+
+            92% {
+                transform: skew(-10deg);
+            }
+        }
+
+        .scanline {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            z-index: 20;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hex-bg"></div>
+    <div class="scanline"></div>
+
+    <div class="portal-container">
+        <div class="text-[0.6rem] tracking-[1em] mb-4 opacity-50">YURA_AUTHORIZED_SYSTEM_ACCESS</div>
+        <h1 class="title">NOMIA</h1>
+
+        <div class="option-grid">
+            <a href="live.html" class="select-card group">
+                <div class="card-title">LIVE_SYSTEM</div>
+                <div class="card-desc">DIRECT_ESP32_CONNECTION // SERIAL_115200</div>
+            </a>
+            <a href="mock.html" class="select-card">
+                <div class="card-title">MOCK_CORE</div>
+                <div class="card-desc">SIMULATED_ENVIRONMENT // PATROL_ALARM_DOCK</div>
+            </a>
+        </div>
+
+        <div class="mt-12 text-[0.5rem] opacity-30 tracking-widest">
+            SECURITY_KEY_VERIFIED: RSA-4096_PASS // SYSTEM_UPTIME_OK
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+{
+    "states": {
+        "PATROL_ACTIVE": {
+            "type": "telemetry",
+            "cpu_temp": 48.5,
+            "uptime": "01:24:12",
+            "ultra_dist": 342,
+            "mode": "AUTO",
+            "logs": [
+                "[SYS] PATROL_MODE_ENGAGED",
+                "[NAV] CALCULATING_PATH_OPTIMIZATION",
+                "[SNR] LIDAR_SCAN_COMPLETE: 360_DEG",
+                "[SYS] BATTERY_LEVEL: 88%",
+                "[NAV] TARGET_COORDINATES: X:42 Y:12",
+                "[SNR] NO_OBSTACLES_DETECTED_IN_500MM"
+            ]
+        },
+        "EMERGENCY_HALT": {
+            "type": "telemetry",
+            "cpu_temp": 62.1,
+            "uptime": "02:10:05",
+            "ultra_dist": 45,
+            "mode": "HALT",
+            "logs": [
+                "[CRT] OBSTACLE_COLLISION_WARNING",
+                "[CRT] EMERGENCY_STOP_TRIGGERED",
+                "[SNR] ULTRA_DIST_ALERT: <50MM",
+                "[SYS] DISABLING_MOTOR_DRIVERS",
+                "[SYS] FANS_MAX_SPEED_ENGAGED",
+                "[COM] SIGNALING_OPERATOR_FOR_MANUAL_RESET"
+            ]
+        },
+        "DOCKING_SEQUENCE": {
+            "type": "telemetry",
+            "cpu_temp": 42.0,
+            "uptime": "00:05:45",
+            "ultra_dist": 120,
+            "mode": "DOCKING",
+            "logs": [
+                "[SYS] DOCKING_STATION_FOUND",
+                "[NAV] ALIGNING_WITH_INFRARED_BEACON",
+                "[SYS] REDUCING_POWER_OUTPUT",
+                "[NAV] DISTANCE_TO_DOCK: 1.2M",
+                "[SYS] CHARGING_INTERFACE_ACTIVE",
+                "[COM] DOCKING_HANDSHAKE_INITIATED"
+            ]
+        }
+    }
+}
