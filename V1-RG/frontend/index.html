@@ -96,25 +96,27 @@
             bottom: 40px;
             left: 40px;
             display: flex;
-            align-items: flex-start;
-            gap: 1rem;
+            flex-direction: column;
+            /* Stacking them vertically */
+            align-items: center;
+            gap: 1.5rem;
             z-index: 100;
         }
 
         .proto-line-container {
             position: relative;
             width: 1px;
-            height: 180px;
-            /* Matched to full vertical text height */
+            height: 120px;
         }
 
         .proto-line-main {
             position: absolute;
-            bottom: 0;
+            top: 0;
+            /* Changed from bottom to top since it's below text */
             left: 0;
             width: 1px;
             height: 100%;
-            background: linear-gradient(to top, #fff, transparent);
+            background: linear-gradient(to bottom, #fff, transparent);
         }
 
         .proto-dot {
@@ -140,7 +142,7 @@
 
         .proto-segment {
             width: 1px;
-            height: 30px;
+            height: 20px;
             background: #fff;
         }
 
@@ -282,22 +284,22 @@
 
     <!-- Bottom Left HUD -->
     <div class="proto-branding">
+        <div class="flex flex-col items-center">
+            <div class="text-[0.4rem] tracking-[0.3em] opacity-10 mb-4 vertical-text">SEC_SERIAL_ID</div>
+            <div class="text-[10px] font-black tracking-[0.6em] text-white vertical-text h-[180px]">
+                <div class="flex flex-col items-center">
+                    <span x-text="typewriter"></span>
+                    <span class="w-[1px] h-3 bg-white mt-1 animate-pulse"
+                        :class="typewriter.length === fullText.length ? 'opacity-0' : 'opacity-100'"></span>
+                </div>
+            </div>
+        </div>
         <div class="proto-line-container">
             <div class="proto-line-main"></div>
             <div class="proto-dot"></div>
             <div class="proto-segments">
                 <div class="proto-segment"></div>
                 <div class="proto-segment"></div>
-            </div>
-        </div>
-        <div class="flex flex-col pt-1">
-            <div class="text-[0.4rem] tracking-[0.3em] opacity-10 mb-4 vertical-text">SEC_SERIAL_ID</div>
-            <div class="text-[10px] font-black tracking-[0.6em] text-white vertical-text h-[180px]">
-                <div class="flex flex-col items-center">
-                    <span x-text="typewriter"></span>
-                    <span x-show="typewriter.length < fullText.length"
-                        class="w-[1px] h-3 bg-white mt-1 animate-pulse"></span>
-                </div>
             </div>
         </div>
     </div>
@@ -312,12 +314,20 @@
                 },
                 async startTypewriter() {
                     while (true) {
-                        this.typewriter = '';
-                        for (let char of this.fullText) {
-                            this.typewriter += char;
+                        // Type phase
+                        for (let i = 0; i <= this.fullText.length; i++) {
+                            this.typewriter = this.fullText.substring(0, i);
                             await new Promise(r => setTimeout(r, 100));
                         }
-                        await new Promise(r => setTimeout(r, 5000));
+                        // Hold phase
+                        await new Promise(r => setTimeout(r, 6000));
+                        // Delete phase
+                        for (let i = this.fullText.length; i >= 0; i--) {
+                            this.typewriter = this.fullText.substring(0, i);
+                            await new Promise(r => setTimeout(r, 50));
+                        }
+                        // Short reset delay
+                        await new Promise(r => setTimeout(r, 1000));
                     }
                 },
                 initSmoothLoop() {
