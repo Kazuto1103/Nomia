@@ -176,7 +176,7 @@
     <div class="overlay vignette"></div>
 
     <!-- Cinematic Dual-Video Crossfade Engine -->
-    <video id="bg-video-1" class="opacity-100" muted playsinline>
+    <video id="bg-video-1" class="opacity-100" muted playsinline autoplay>
         <source src="/assets/bg_decoration.mp4" type="video/mp4">
     </video>
     <video id="bg-video-2" class="opacity-0" muted playsinline>
@@ -318,10 +318,16 @@
                     setInterval(() => { if (!this.connected) { this.triggerGlitch = true; setTimeout(() => this.triggerGlitch = false, 150); } }, 2500);
                 },
                 connect() {
-                    this.ws = new WebSocket(`ws://${window.location.hostname}:8080/ws`);
-                    this.ws.onopen = () => { this.connected = true; };
-                    this.ws.onmessage = (e) => { this.telemetry = JSON.parse(e.data); this.$nextTick(() => { const c = document.getElementById('log-container'); if (c) c.scrollTop = c.scrollHeight; }); };
-                    this.ws.onclose = () => { this.connected = false; this.telemetry.mode = 'LINK_LOST'; setTimeout(() => this.connect(), 2000); };
+                    try {
+                        this.ws = new WebSocket(`ws://${window.location.hostname}:8080/ws`);
+                        this.ws.onopen = () => { this.connected = true; };
+                        this.ws.onmessage = (e) => { this.telemetry = JSON.parse(e.data); this.$nextTick(() => { const c = document.getElementById('log-container'); if (c) c.scrollTop = c.scrollHeight; }); };
+                        this.ws.onclose = () => { this.connected = false; this.telemetry.mode = 'LINK_LOST'; setTimeout(() => this.connect(), 2000); };
+                    } catch (e) {
+                        console.warn("WebSocket Connection Failed (Likely Vercel/HTTPS restrictions):", e);
+                        this.connected = false;
+                        this.telemetry.mode = 'OFFLINE';
+                    }
                 },
                 sendCmd(action, value = "") { fetch(`http://${window.location.hostname}:8080/command`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action, value }) }); },
                 setMode(m) { this.sendCmd('CMD_MODE', m); },
