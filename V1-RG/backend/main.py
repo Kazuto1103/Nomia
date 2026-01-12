@@ -139,11 +139,23 @@ app.add_middleware(
 )
 
 # Serves decoration assets (videos, images)
+# For Vercel, we use absolute paths based on the current file
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DECORATION_DIR = os.path.join(BASE_DIR, "..", "decoration")
-FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
+# Note: Vercel structure differs, we check for deployment env
+IS_VERCEL = os.getenv("VERCEL") == "1"
 
-app.mount("/assets", StaticFiles(directory=DECORATION_DIR), name="assets")
+if IS_VERCEL:
+    # On Vercel, the files are in the root of the deployment
+    DECORATION_DIR = os.path.join(BASE_DIR, "..", "decoration")
+    FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
+else:
+    # Locally we use the existing structure
+    DECORATION_DIR = os.path.join(BASE_DIR, "..", "decoration")
+    FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
+
+# Mounts (Only active locally, Vercel uses vercel.json rewrites)
+if not IS_VERCEL:
+    app.mount("/assets", StaticFiles(directory=DECORATION_DIR), name="assets")
 
 # --- Endpoints ---
 @app.get("/")
@@ -184,9 +196,9 @@ async def websocket_endpoint(websocket: WebSocket):
         logger.error(f"WebSocket Error: {e}")
         manager.disconnect(websocket)
 
-# --- Static File Catch-All ---
-# Note: Root mount is at the end to ensure /ws and other API routes take priority
-app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+# Static File Catch-All (Only locally)
+if not IS_VERCEL:
+    app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
 
 if __name__ == "__main__":
     import uvicorn

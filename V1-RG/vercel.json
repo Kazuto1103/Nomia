@@ -1,0 +1,30 @@
+{
+    "cleanUrls": true,
+    "functions": {
+        "backend/main.py": {
+            "runtime": "vercel-python@3.11"
+        }
+    },
+    "rewrites": [
+        {
+            "source": "/assets/(.*)",
+            "destination": "/decoration/$1"
+        },
+        {
+            "source": "/ws",
+            "destination": "/backend/main.py"
+        },
+        {
+            "source": "/command",
+            "destination": "/backend/main.py"
+        },
+        {
+            "source": "/",
+            "destination": "/frontend/index.html"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/frontend/$1"
+        }
+    ]
+}
