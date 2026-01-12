@@ -94,20 +94,20 @@
         .proto-branding {
             position: fixed;
             bottom: 40px;
-            left: 40px;
+            left: 10px;
             display: flex;
             flex-direction: row;
             /* Side by side */
             align-items: flex-start;
-            gap: 1.5rem;
+            gap: 1rem;
             z-index: 100;
         }
 
         .proto-line-container {
             position: relative;
             width: 1px;
-            height: 180px;
-            /* Full height to match vertical text */
+            height: 220px;
+            /* Aligned with SEC_ID + Typewriter height */
         }
 
         .proto-line-main {
@@ -116,7 +116,11 @@
             left: 0;
             width: 1px;
             height: 100%;
-            background: linear-gradient(to bottom, #fff, transparent);
+            background: linear-gradient(to bottom,
+                    #fff 0%,
+                    rgba(255, 255, 255, 0.8) 20%,
+                    rgba(255, 255, 255, 0.2) 80%,
+                    transparent 100%);
         }
 
         .proto-dot {
