@@ -176,7 +176,7 @@
     <div class="overlay vignette"></div>
 
     <!-- Cinematic Dual-Video Crossfade Engine -->
-    <video id="bg-video-1" class="opacity-100" muted playsinline autoplay>
+    <video id="bg-video-1" class="opacity-100" muted playsinline>
         <source src="/assets/bg_decoration.mp4" type="video/mp4">
     </video>
     <video id="bg-video-2" class="opacity-0" muted playsinline>
@@ -344,7 +344,10 @@
                         const checkPos = () => { if (activeVid.duration > 0 && activeVid.duration - activeVid.currentTime < 1.5) { activeVid.removeEventListener('timeupdate', checkPos); transition(); } };
                         activeVid.addEventListener('timeupdate', checkPos);
                     };
-                    v1.play().then(() => scheduleTransition()).catch(() => { window.addEventListener('click', () => { v1.play(); scheduleTransition(); }, { once: true }); });
+                    const start = () => {
+                        v1.play().then(() => scheduleTransition()).catch(() => { window.addEventListener('click', () => { v1.play(); scheduleTransition(); }, { once: true }); });
+                    };
+                    start();
                 }
             }
         }
