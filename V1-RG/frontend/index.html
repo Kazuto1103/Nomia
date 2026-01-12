@@ -90,6 +90,65 @@
             object-fit: cover;
         }
 
+        /* Bottom Left Branding HUD */
+        .proto-branding {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .proto-line-container {
+            position: relative;
+            width: 1px;
+            height: 180px;
+            /* Matched to full vertical text height */
+        }
+
+        .proto-line-main {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(to top, #fff, transparent);
+        }
+
+        .proto-dot {
+            position: absolute;
+            top: 0;
+            left: -2px;
+            width: 5px;
+            height: 5px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff;
+        }
+
+        .proto-segments {
+            position: absolute;
+            right: -6px;
+            top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            opacity: 0.3;
+        }
+
+        .proto-segment {
+            width: 1px;
+            height: 30px;
+            background: #fff;
+        }
+
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
         .title {
             font-size: 4rem;
             font-weight: 800;
@@ -204,7 +263,6 @@
     <div class="portal-container">
         <div class="text-[0.6rem] tracking-[1em] mb-4 opacity-50">YURA_AUTHORIZED_SYSTEM_ACCESS</div>
         <h1 class="title">NOMIA</h1>
-        <div class="text-[0.6rem] tracking-[1.5em] opacity-40 -mt-6 mb-12">PHANTOM_TERMINAL</div>
 
         <div class="option-grid">
             <a href="live.html" class="select-card group">
@@ -221,11 +279,46 @@
             SECURITY_KEY_VERIFIED: RSA-4096_PASS // SYSTEM_UPTIME_OK
         </div>
     </div>
+
+    <!-- Bottom Left HUD -->
+    <div class="proto-branding">
+        <div class="proto-line-container">
+            <div class="proto-line-main"></div>
+            <div class="proto-dot"></div>
+            <div class="proto-segments">
+                <div class="proto-segment"></div>
+                <div class="proto-segment"></div>
+            </div>
+        </div>
+        <div class="flex flex-col pt-1">
+            <div class="text-[0.4rem] tracking-[0.3em] opacity-10 mb-4 vertical-text">SEC_SERIAL_ID</div>
+            <div class="text-[10px] font-black tracking-[0.6em] text-white vertical-text h-[180px]">
+                <div class="flex flex-col items-center">
+                    <span x-text="typewriter"></span>
+                    <span x-show="typewriter.length < fullText.length"
+                        class="w-[1px] h-3 bg-white mt-1 animate-pulse"></span>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         function portal() {
             return {
+                typewriter: '',
+                fullText: 'PHANTOM_TERMINAL',
                 init() {
                     this.initSmoothLoop();
+                    this.startTypewriter();
+                },
+                async startTypewriter() {
+                    while (true) {
+                        this.typewriter = '';
+                        for (let char of this.fullText) {
+                            this.typewriter += char;
+                            await new Promise(r => setTimeout(r, 100));
+                        }
+                        await new Promise(r => setTimeout(r, 5000));
+                    }
                 },
                 initSmoothLoop() {
                     const v1 = document.getElementById('bg-portal-1');
