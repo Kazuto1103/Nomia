@@ -37,7 +37,8 @@
             background: rgba(10, 10, 10, 0.8);
         }
 
-        #bg-video {
+        #bg-video-1,
+        #bg-video-2 {
             position: fixed;
             top: 50%;
             left: 50%;
@@ -49,6 +50,7 @@
             z-index: -1;
             filter: grayscale(100%) contrast(140%) brightness(35%);
             object-fit: cover;
+            transition: opacity 2s ease-in-out;
         }
 
         .overlay {
@@ -172,7 +174,12 @@
 <body x-data="v1rg()" :class="{ 'glitch-active': !connected && triggerGlitch }">
     <div class="overlay scanlines"></div>
     <div class="overlay vignette"></div>
-    <video id="bg-video" autoplay muted loop playsinline>
+
+    <!-- Cinematic Dual-Video Crossfade Engine -->
+    <video id="bg-video-1" class="opacity-100" muted playsinline autoplay>
+        <source src="/assets/bg_decoration.mp4" type="video/mp4">
+    </video>
+    <video id="bg-video-2" class="opacity-0" muted playsinline>
         <source src="/assets/bg_decoration.mp4" type="video/mp4">
     </video>
 
@@ -238,7 +245,7 @@
                         class="absolute inset-4 border border-white/10 rounded-full animate-spin [animation-duration:15s] direction-reverse">
                     </div>
                     <div class="text-center z-10">
-                        <div class="text-[8px] tracking-[1em] opacity-30 mb-2">ACTIVE_MODE</div>
+                        <div class="text-[8px] tracking-[1em] opacity-50 mb-2">STATUS</div>
                         <div class="text-2xl font-black tracking-tighter px-6 py-2 border border-white"
                             x-text="telemetry.mode"></div>
                     </div>
@@ -304,17 +311,41 @@
             return {
                 connected: false, triggerGlitch: false, ws: null,
                 telemetry: { cpu_temp: '--', uptime: '00:00:00', ultra_dist: 0, mode: 'OFFLINE', logs: [] },
-                init() { this.connect(); this.initKeyListeners(); setInterval(() => { if (!this.connected) { this.triggerGlitch = true; setTimeout(() => this.triggerGlitch = false, 150); } }, 2500); },
+                init() {
+                    this.connect();
+                    this.initKeyListeners();
+                    this.initSmoothLoop();
+                    setInterval(() => { if (!this.connected) { this.triggerGlitch = true; setTimeout(() => this.triggerGlitch = false, 150); } }, 2500);
+                },
                 connect() {
                     this.ws = new WebSocket(`ws://${window.location.hostname}:8080/ws`);
                     this.ws.onopen = () => { this.connected = true; };
-                    this.ws.onmessage = (e) => { this.telemetry = JSON.parse(e.data); this.$nextTick(() => { const c = document.getElementById('log-container'); c.scrollTop = c.scrollHeight; }); };
+                    this.ws.onmessage = (e) => { this.telemetry = JSON.parse(e.data); this.$nextTick(() => { const c = document.getElementById('log-container'); if (c) c.scrollTop = c.scrollHeight; }); };
                     this.ws.onclose = () => { this.connected = false; this.telemetry.mode = 'LINK_LOST'; setTimeout(() => this.connect(), 2000); };
                 },
                 sendCmd(action, value = "") { fetch(`http://${window.location.hostname}:8080/command`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action, value }) }); },
                 setMode(m) { this.sendCmd('CMD_MODE', m); },
                 terminate() { this.sendCmd('CMD_TERMINATE'); },
-                initKeyListeners() { window.addEventListener('keydown', (e) => { const keys = { 'w': 'FWD', 's': 'BWD', 'a': 'LEFT', 'd': 'RIGHT' }; if (keys[e.key.toLowerCase()]) this.sendCmd('CMD_MOVE', keys[e.key.toLowerCase()]); }); }
+                initKeyListeners() { window.addEventListener('keydown', (e) => { const keys = { 'w': 'FWD', 's': 'BWD', 'a': 'LEFT', 'd': 'RIGHT' }; if (keys[e.key.toLowerCase()]) this.sendCmd('CMD_MOVE', keys[e.key.toLowerCase()]); }); },
+                initSmoothLoop() {
+                    const v1 = document.getElementById('bg-video-1');
+                    const v2 = document.getElementById('bg-video-2');
+                    v1.muted = v2.muted = true;
+                    let activeVid = v1, nextVid = v2;
+                    const transition = () => {
+                        nextVid.currentTime = 0;
+                        nextVid.play().then(() => {
+                            nextVid.style.opacity = 1; activeVid.style.opacity = 0;
+                            [activeVid, nextVid] = [nextVid, activeVid];
+                            scheduleTransition();
+                        }).catch(() => { activeVid.currentTime = 0; scheduleTransition(); });
+                    };
+                    const scheduleTransition = () => {
+                        const checkPos = () => { if (activeVid.duration > 0 && activeVid.duration - activeVid.currentTime < 1.5) { activeVid.removeEventListener('timeupdate', checkPos); transition(); } };
+                        activeVid.addEventListener('timeupdate', checkPos);
+                    };
+                    v1.play().then(() => scheduleTransition()).catch(() => { window.addEventListener('click', () => { v1.play(); scheduleTransition(); }, { once: true }); });
+                }
             }
         }
     </script>

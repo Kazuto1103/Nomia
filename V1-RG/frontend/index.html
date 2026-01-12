@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NOMIA // SYSTEM_PORTAL_v1.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&display=swap" rel="stylesheet">
     <style>
         body {
@@ -39,8 +40,54 @@
             background-image:
                 radial-gradient(circle at center, transparent 30%, #000 90%),
                 url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
-            opacity: 0.3;
+            opacity: 0.15;
+            z-index: 1;
+        }
+
+        #bg-portal-1,
+        #bg-portal-2 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             z-index: 0;
+            filter: grayscale(100%) contrast(150%) brightness(25%);
+            transition: opacity 2s ease-in-out;
+        }
+
+        .hud-overlay {
+            position: fixed;
+            width: 30vw;
+            height: 30vw;
+            z-index: 5;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            opacity: 0.4;
+            /* Crushing blacks to blend with pure #000 */
+            filter: grayscale(100%) brightness(120%) contrast(180%);
+            /* Masking edges to prevent hard rectangles */
+            -webkit-mask-image: radial-gradient(circle, black 30%, transparent 70%);
+            mask-image: radial-gradient(circle, black 30%, transparent 70%);
+        }
+
+        .hud-tl {
+            top: 0;
+            left: 0;
+            transform: scaleX(-1);
+        }
+
+        .hud-br {
+            bottom: 0;
+            right: 0;
+            transform: scaleY(-1);
+        }
+
+        .hologram-vid {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .title {
@@ -130,9 +177,29 @@
     </style>
 </head>
 
-<body>
+<body x-data="portal()" class="bg-black">
+    <!-- Cinematic Dual-Video Crossfade Engine -->
+    <video id="bg-portal-1" class="opacity-100" muted playsinline autoplay>
+        <source src="/assets/wireframe_bg.mp4" type="video/mp4">
+    </video>
+    <video id="bg-portal-2" class="opacity-0" muted playsinline>
+        <source src="/assets/wireframe_bg.mp4" type="video/mp4">
+    </video>
+
+    <!-- Corner HUD Projections -->
+    <div class="hud-overlay hud-tl">
+        <video class="hologram-vid" autoplay muted loop playsinline>
+            <source src="/assets/hologram_overlay3.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="hud-overlay hud-br">
+        <video class="hologram-vid" autoplay muted loop playsinline>
+            <source src="/assets/hologram_overlay.mp4" type="video/mp4">
+        </video>
+    </div>
+
     <div class="hex-bg"></div>
-    <div class="scanline"></div>
+    <div class="scanline" style="z-index: 50;"></div>
 
     <div class="portal-container">
         <div class="text-[0.6rem] tracking-[1em] mb-4 opacity-50">YURA_AUTHORIZED_SYSTEM_ACCESS</div>
@@ -141,7 +208,7 @@
         <div class="option-grid">
             <a href="live.html" class="select-card group">
                 <div class="card-title">LIVE_SYSTEM</div>
-                <div class="card-desc">DIRECT_ESP32_CONNECTION // SERIAL_115200</div>
+                <div class="card-desc">DIRECT_CONNECTION // SERIAL_115200</div>
             </a>
             <a href="mock.html" class="select-card">
                 <div class="card-title">MOCK_CORE</div>
@@ -153,6 +220,34 @@
             SECURITY_KEY_VERIFIED: RSA-4096_PASS // SYSTEM_UPTIME_OK
         </div>
     </div>
+    <script>
+        function portal() {
+            return {
+                init() {
+                    this.initSmoothLoop();
+                },
+                initSmoothLoop() {
+                    const v1 = document.getElementById('bg-portal-1');
+                    const v2 = document.getElementById('bg-portal-2');
+                    v1.muted = v2.muted = true;
+                    let activeVid = v1, nextVid = v2;
+                    const transition = () => {
+                        nextVid.currentTime = 0;
+                        nextVid.play().then(() => {
+                            nextVid.style.opacity = 1; activeVid.style.opacity = 0;
+                            [activeVid, nextVid] = [nextVid, activeVid];
+                            scheduleTransition();
+                        }).catch(() => { activeVid.currentTime = 0; scheduleTransition(); });
+                    };
+                    const scheduleTransition = () => {
+                        const checkPos = () => { if (activeVid.duration > 0 && activeVid.duration - activeVid.currentTime < 1.5) { activeVid.removeEventListener('timeupdate', checkPos); transition(); } };
+                        activeVid.addEventListener('timeupdate', checkPos);
+                    };
+                    v1.play().then(() => scheduleTransition()).catch(() => { window.addEventListener('click', () => { v1.play(); scheduleTransition(); }, { once: true }); });
+                }
+            }
+        }
+    </script>
 </body>
 
 </html>
