@@ -3,18 +3,29 @@
 :root {
   --background: #050505;
   --foreground: #ffffff;
+  --font-jetbrains-mono: "JetBrains Mono", monospace;
+  /* Added for strict JetBrains Mono */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter), ui-sans-serif, system-ui;
-  --font-mono: var(--font-mono), ui-monospace, monospace;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  /* Updated to use --font-jetbrains-mono */
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+  min-height: 100vh;
+  /* Added from the instruction's body block */
+  margin: 0;
+  /* Added from the instruction's body block */
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  /* Added for strict JetBrains Mono */
+  overflow-x: hidden;
+  /* Added from the instruction's body block */
 }
 
 /* Utilities */
@@ -38,19 +49,37 @@ body {
   border-color: #FFFFFF !important;
 }
 
-/* Scanlines Strategy */
+/* Scanlines and Overlays */
+/* Updated comment */
 .scanlines {
-  background: linear-gradient(to bottom,
-      rgba(255, 255, 255, 0),
-      rgba(255, 255, 255, 0) 50%,
-      rgba(0, 0, 0, 0.3) 50%,
-      rgba(0, 0, 0, 0.3));
-  background-size: 100% 4px;
-  pointer-events: none;
-  z-index: 30;
   position: fixed;
-  inset: 0;
+  /* Moved from original block */
+  top: 0;
+  /* Added from instruction's scanlines block */
+  left: 0;
+  /* Added from instruction's scanlines block */
+  width: 100%;
+  /* Added from instruction's scanlines block */
+  height: 100%;
+  /* Added from instruction's scanlines block */
+  background: linear-gradient(
+      /* Updated background from instruction */
+      rgba(18, 16, 16, 0) 50%,
+      rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg,
+      rgba(255, 0, 0, 0.03),
+      rgba(0, 255, 0, 0.01),
+      rgba(0, 0, 255, 0.03));
+  background-size: 100% 4px, 3px 100%;
+  /* Updated background-size from instruction */
+  pointer-events: none;
+  z-index: 1000;
+  /* Updated z-index as per instruction */
   opacity: 0.4;
+}
+
+.glow-text {
+  /* Added .glow-text as per instruction */
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.2);
 }
 
 /* Vignette Strategy */

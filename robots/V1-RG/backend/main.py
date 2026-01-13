@@ -149,8 +149,8 @@ if IS_VERCEL:
     DECORATION_DIR = os.path.join(BASE_DIR, "..", "decoration")
     FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
 else:
-    # Locally we use the existing structure
-    DECORATION_DIR = os.path.join(BASE_DIR, "..", "decoration")
+    # Point to the centralized public assets in nomia-web
+    DECORATION_DIR = os.path.join(BASE_DIR, "..", "..", "nomia-web", "public", "decoration")
     FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
 
 # Mounts (Only active locally, Vercel uses vercel.json rewrites)

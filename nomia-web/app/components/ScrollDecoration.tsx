@@ -1,128 +1,104 @@
 "use client";
 
-import { motion, useScroll } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useTypewriter } from "../hooks/useTypewriter";
 
 export default function ScrollDecoration() {
     const { scrollYProgress } = useScroll();
-    const [showDecoration, setShowDecoration] = useState(false);
-    const [animationStage, setAnimationStage] = useState(0);
 
-    // Track scroll progress
+    // Smooth the scroll input for fluid animations
+    const smoothProgress = useSpring(scrollYProgress, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    });
+
+    // BOX 1: Base layer
+    const box1Opacity = useTransform(smoothProgress, [0.1, 0.15, 0.7, 0.75], [0, 1, 1, 0]);
+    const box1X = useTransform(smoothProgress, [0.1, 0.15], [50, 0]); // Slide in from right
+    const box1Y = useTransform(smoothProgress, [0.1, 0.15], [0, 0]);
+
+    // BOX 2: Offset trailing towards corner
+    const box2Opacity = useTransform(smoothProgress, [0.15, 0.2, 0.7, 0.75], [0, 1, 1, 0]);
+    const box2X = useTransform(smoothProgress, [0.15, 0.2], [50, 4]);
+    const box2Y = useTransform(smoothProgress, [0.15, 0.2], [0, 4]);
+
+    // BOX 3: Offset trailing towards corner
+    const box3Opacity = useTransform(smoothProgress, [0.2, 0.25, 0.7, 0.75], [0, 1, 1, 0]);
+    const box3X = useTransform(smoothProgress, [0.2, 0.25], [50, 8]);
+    const box3Y = useTransform(smoothProgress, [0.2, 0.25], [0, 8]);
+
+    // BOX 4 (TOP): Prominent layer
+    const box4Opacity = useTransform(smoothProgress, [0.25, 0.3, 0.7, 0.75], [0, 1, 1, 0]);
+    const box4X = useTransform(smoothProgress, [0.25, 0.3], [50, 12]);
+    const box4Y = useTransform(smoothProgress, [0.25, 0.3], [0, 12]);
+
+    // TYPEWRITER TRIGGER
+    const [shouldType, setShouldType] = useState(false);
     useEffect(() => {
-        const unsubscribe = scrollYProgress.on("change", (latest) => {
-            // Show when scrolled between 10% and 70%
-            if (latest > 0.1 && latest < 0.7) {
-                if (!showDecoration) {
-                    setShowDecoration(true);
-                    setAnimationStage(0);
-                    // Trigger animation stages - boxes appear sequentially
-                    setTimeout(() => setAnimationStage(1), 100);  // Box 1
-                    setTimeout(() => setAnimationStage(2), 250);  // Box 2
-                    setTimeout(() => setAnimationStage(3), 400);  // Box 3
-                    setTimeout(() => setAnimationStage(4), 550);  // Box 4 (top, with text)
-                }
-            } else {
-                setShowDecoration(false);
-                setAnimationStage(0);
+        const unsubscribe = smoothProgress.on("change", (latest) => {
+            if (latest > 0.3 && latest < 0.7) {
+                setShouldType(true);
+            } else if (latest < 0.2 || latest > 0.8) {
+                setShouldType(false);
             }
         });
-
         return () => unsubscribe();
-    }, [scrollYProgress, showDecoration]);
+    }, [smoothProgress]);
 
     const line1 = "GOD'S IN HIS HEAVEN";
     const line2 = "ALL'S RIGHT WITH THE WORLD";
 
-    const { displayText: text1 } = useTypewriter(line1, 40, 0, animationStage >= 4);
-    const { displayText: text2 } = useTypewriter(line2, 40, 0, animationStage >= 4);
-
-    if (!showDecoration) return null;
+    const { displayText: text1 } = useTypewriter(line1, 40, 0, shouldType);
+    const { displayText: text2 } = useTypewriter(line2, 40, 0, shouldType);
 
     return (
         <>
-            {/* Right Side Decoration - Stacked Boxes (Windows Error Style) */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed right-16 top-1/3 z-40 pointer-events-none"
-            >
+            {/* Minimal Corner Decoration - Relocated to Bottom-Right */}
+            <div className="fixed right-8 bottom-24 z-40 pointer-events-none">
                 <div className="relative">
-                    {/* Box 1 - Bottom layer (furthest back) */}
-                    {animationStage >= 1 && (
-                        <motion.div
-                            initial={{ opacity: 0, x: 20, y: 20 }}
-                            animate={{ opacity: 1, x: 0, y: 0 }}
-                            transition={{ duration: 0.2, ease: "easeOut" }}
-                            className="absolute top-0 left-0 w-56 h-28 border border-white/20 bg-black"
-                        />
-                    )}
+                    {/* Box 1 */}
+                    <motion.div
+                        style={{ opacity: box1Opacity, x: box1X, y: box1Y }}
+                        className="absolute top-0 right-0 w-32 h-16 border border-white/20 bg-black/40 backdrop-blur-[2px]"
+                    />
 
-                    {/* Box 2 - Second layer */}
-                    {animationStage >= 2 && (
-                        <motion.div
-                            initial={{ opacity: 0, x: 20, y: 20 }}
-                            animate={{ opacity: 1, x: 6, y: 6 }}
-                            transition={{ duration: 0.2, ease: "easeOut" }}
-                            className="absolute top-0 left-0 w-56 h-28 border border-white/30 bg-black"
-                        />
-                    )}
+                    {/* Box 2 */}
+                    <motion.div
+                        style={{ opacity: box2Opacity, x: box2X, y: box2Y }}
+                        className="absolute top-0 right-0 w-32 h-16 border border-white/30 bg-black/40 backdrop-blur-[2px]"
+                    />
 
-                    {/* Box 3 - Third layer */}
-                    {animationStage >= 3 && (
-                        <motion.div
-                            initial={{ opacity: 0, x: 20, y: 20 }}
-                            animate={{ opacity: 1, x: 12, y: 12 }}
-                            transition={{ duration: 0.2, ease: "easeOut" }}
-                            className="absolute top-0 left-0 w-56 h-28 border border-white/40 bg-black"
-                        />
-                    )}
+                    {/* Box 3 */}
+                    <motion.div
+                        style={{ opacity: box3Opacity, x: box3X, y: box3Y }}
+                        className="absolute top-0 right-0 w-32 h-16 border border-white/40 bg-black/40 backdrop-blur-[2px]"
+                    />
 
-                    {/* Box 4 - Top layer with text (NOMIA style) */}
-                    {animationStage >= 4 && (
-                        <motion.div
-                            initial={{ opacity: 0, x: 20, y: 20 }}
-                            animate={{ opacity: 1, x: 18, y: 18 }}
-                            transition={{ duration: 0.3, ease: "easeOut" }}
-                            className="absolute top-0 left-0 w-56 h-28 border border-white bg-black"
-                        >
-                            {/* Minimal Corner Accents */}
-                            <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-white" />
-                            <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-white" />
-                            <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-white" />
-                            <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-white" />
+                    {/* Box 4 - Top layer */}
+                    <motion.div
+                        style={{ opacity: box4Opacity, x: box4X, y: box4Y }}
+                        className="absolute top-0 right-0 w-32 h-16 border border-white bg-black/90 backdrop-blur-md"
+                    >
+                        {/* Minimal Corner Accents */}
+                        <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-white" />
+                        <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white" />
 
-                            {/* Top Bar (Title Bar Style) */}
-                            <div className="absolute top-0 left-0 right-0 h-6 border-b border-white/20 flex items-center px-2">
-                                <div className="flex gap-1">
-                                    <div className="w-1 h-1 bg-white/50" />
-                                    <div className="w-1 h-1 bg-white/50" />
-                                    <div className="w-1 h-1 bg-white/50" />
+                        {/* Text Content */}
+                        <div className="absolute inset-0 flex flex-col items-center justify-center px-1 font-mono text-white text-[7px] tracking-[0.1em]">
+                            <div className="text-center space-y-0.5 leading-tight">
+                                <div className="opacity-70">
+                                    {text1}
+                                </div>
+                                <div className="opacity-70">
+                                    {text2}
                                 </div>
                             </div>
-
-                            {/* Text Content */}
-                            <div className="absolute inset-0 top-6 flex flex-col items-center justify-center px-3 font-mono text-white text-[9px] tracking-[0.15em]">
-                                <div className="text-center space-y-0.5 leading-tight">
-                                    <div className="opacity-80">
-                                        {text1}
-                                        {text1.length < line1.length && <span className="animate-pulse">_</span>}
-                                    </div>
-                                    <div className="opacity-80">
-                                        {text2}
-                                        {text2.length < line2.length && <span className="animate-pulse">_</span>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Scanline effect overlay */}
-                            <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(255,255,255,0)_50%,rgba(255,255,255,0.02)_50%)] bg-[length:100%_2px]" />
-                        </motion.div>
-                    )}
+                        </div>
+                    </motion.div>
                 </div>
-            </motion.div>
+            </div>
         </>
     );
 }

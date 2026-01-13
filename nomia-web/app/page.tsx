@@ -12,6 +12,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import MechaTechSpecs from "./components/MechaTechSpecs";
 import ScrollDecoration from "./components/ScrollDecoration";
+import ModeSelector from "./components/ModeSelector";
+import dynamic from "next/dynamic";
+
+const FloatingWarpSystem = dynamic(() => import("./components/FloatingWarpSystem"), { ssr: false });
+import Lenis from "lenis";
 
 // Register GSAP Plugins
 if (typeof window !== "undefined") {
@@ -22,6 +27,8 @@ export default function NomiaLanding() {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const [showTechSpecs, setShowTechSpecs] = useState(false);
+  const [showModeSelector, setShowModeSelector] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   // SECTION 1: IDENTITY (HERO)
   const heroRef = useRef<HTMLDivElement>(null);
@@ -60,67 +67,150 @@ export default function NomiaLanding() {
           start: "top 70%",
         }
       });
+
+      // Biography Reveal (Line by line)
+      gsap.utils.toArray(".bio-line").forEach((line: any) => {
+        gsap.from(line, {
+          y: 20,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: line,
+            start: "top 80%",
+            end: "top 50%",
+            scrub: 1,
+          }
+        });
+      });
     }, containerRef);
 
     return () => ctx.revert();
   }, []);
 
+  useEffect(() => {
+    // Lenis Smooth Scroll
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: "vertical",
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // GSAP ScrollTrigger Refresh
+    ScrollTrigger.refresh();
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
   const navigateToTerminal = () => {
-    // Navigate to local or proxied V1-RG
-    window.location.href = "/v1-rg/live";
+    setIsNavigating(true);
+    setTimeout(() => {
+      setShowModeSelector(true);
+      setIsNavigating(false);
+    }, 500);
   };
 
   return (
-    <main ref={containerRef} className="bg-black text-white min-h-[300vh] relative overflow-hidden font-mono selection:bg-white selection:text-black">
+    <main ref={containerRef} className="relative min-h-screen bg-black text-white font-mono selection:bg-white selection:text-black overflow-x-hidden">
 
-      {/* GLOBAL BACKGROUND LAYERS */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        {/* Main Atmosphere Video */}
-        <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-20 filter grayscale contrast-125 brightness-50 z-0">
+      {/* 1. GLOBAL BACKGROUND (Low Opacity) */}
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-20 overflow-hidden">
+        <video autoPlay loop muted playsInline className="w-full h-full object-cover grayscale">
           <source src="/decoration/bg_decoration.mp4" type="video/mp4" />
         </video>
-        {/* Noise Overlay */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay z-1"></div>
-        {/* Scanlines - Positioned at z-30 in CSS or below content */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%] pointer-events-none z-30"></div>
-        {/* Vignette */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)] z-5"></div>
       </div>
 
-      {/* SECTION 01: THE IDENTITY (HERO) */}
-      <section ref={heroRef} className="relative z-20 h-screen flex flex-col items-center justify-center p-8 text-center border-b border-white/10">
+      {/* 2. HUD OVERLAYS (4 Quadrants) */}
+      <div className="fixed inset-0 z-10 pointer-events-none mix-blend-screen overflow-hidden">
+        {/* Top Left */}
+        <div className="absolute top-0 left-0 w-1/3 h-1/3 opacity-40">
+          <video autoPlay loop muted playsInline className="w-full h-full object-contain object-left-top">
+            <source src="/decoration/hologram_overlay.mp4" type="video/mp4" />
+          </video>
+        </div>
+        {/* Top Right */}
+        <div className="absolute top-0 right-0 w-1/3 h-1/3 opacity-30">
+          <video autoPlay loop muted playsInline className="w-full h-full object-contain object-right-top">
+            <source src="/decoration/hologram_overlay2.mp4" type="video/mp4" />
+          </video>
+        </div>
+        {/* Bottom Left */}
+        <div className="absolute bottom-0 left-0 w-1/3 h-1/3 opacity-30">
+          <video autoPlay loop muted playsInline className="w-full h-full object-contain object-left-bottom">
+            <source src="/decoration/hologram_overlay3.mp4" type="video/mp4" />
+          </video>
+        </div>
+        {/* Bottom Right */}
+        <div className="absolute bottom-0 right-0 w-1/3 h-1/3 opacity-40">
+          <video autoPlay loop muted playsInline className="w-full h-full object-contain object-right-bottom">
+            <source src="/decoration/hologram_overlay4.mp4" type="video/mp4" />
+          </video>
+        </div>
+      </div>
+
+      {/* 3. FLOATING WARP SYSTEM */}
+      <FloatingWarpSystem />
+
+      {/* 4. ATMOSPHERIC LAYERS */}
+      <div className="scanlines" />
+      <div className="vignette" />
+
+      {/* Visual Noise Transition */}
+      <AnimatePresence>
+        {isNavigating && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[1000] bg-white pointer-events-none"
+          >
+            <div className="absolute inset-0 bg-[url('https://media.giphy.com/media/oEI9uWU0WMrQmURwEc/giphy.gif')] opacity-50 mix-blend-difference bg-repeat" />
+            <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* SECTION 01: IDENTITY (HERO) */}
+      <section ref={heroRef} className="relative z-20 h-screen flex flex-col items-center justify-center p-6 bg-black/20">
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.5, ease: "circOut" }}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: "circOut" }}
           className="flex flex-col items-center"
         >
           <div className="mb-4 flex items-center gap-4 opacity-50">
             <span className="h-[1px] w-12 bg-white"></span>
-            <span className="text-[10px] tracking-[0.5em] uppercase">System Architect_Profile</span>
+            <span className="text-[10px] tracking-[0.5em] uppercase">NOMIA // SYSTEM_PORTAL</span>
             <span className="h-[1px] w-12 bg-white"></span>
           </div>
 
-          {/* MASKED VIDEO TEXT */}
-          <h1 ref={titleRef} className="text-[12vw] font-black leading-none tracking-tighter mix-blend-difference relative">
+          <h1 ref={titleRef} className="text-[12vw] font-black leading-none tracking-tighter mix-blend-difference relative glow-text">
             <span className="block relative z-20 text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-500">NOMIA</span>
             <span className="absolute inset-0 z-10 text-white/5 blur-sm">NOMIA</span>
           </h1>
 
-          <div className="mt-8 max-w-md text-justify text-xs opacity-60 leading-relaxed border-l-2 border-white/20 pl-4">
-            <p>
-              Advanced robotics interface ecosystem. Integrating high-fidelity web technologies with raw hardware telemetry.
+          <div className="mt-12 max-w-2xl text-center space-y-6">
+            <p className="bio-line text-lg md:text-2xl font-bold tracking-tight opacity-100 glow-text">
+              Dystopian. Industrial. Automated.
             </p>
-            <p className="mt-4 font-bold tracking-widest text-white/80">
-              &gt; STATUS: OPERATIONAL
-            </p>
+            <div className="flex flex-col gap-4">
+              <p className="bio-line text-sm opacity-60 leading-relaxed uppercase tracking-widest">
+                Merging synthetic consciousness with raw steel protocols.
+              </p>
+              <p className="bio-line text-sm opacity-60 leading-relaxed uppercase tracking-widest">
+                System optimized for high-fidelity interactive engagement.
+              </p>
+            </div>
           </div>
         </motion.div>
-
-        <div className="absolute bottom-12 animate-bounce opacity-30">
-          <p className="text-[9px] tracking-widest mb-2">[ SCROLL_TO_INITIATE ]</p>
-          <div className="w-[1px] h-12 bg-white mx-auto"></div>
-        </div>
       </section>
 
       {/* SECTION 02: FLEET REGISTRY */}
@@ -235,6 +325,9 @@ export default function NomiaLanding() {
 
       {/* Scroll-Synced Decorations */}
       <ScrollDecoration />
+
+      {/* Mode Selector Popup */}
+      <ModeSelector isOpen={showModeSelector} onClose={() => setShowModeSelector(false)} />
 
     </main>
   );
