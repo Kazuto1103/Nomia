@@ -1,0 +1,33 @@
+{
+    "cleanUrls": true,
+    "rewrites": [
+        {
+            "source": "/decoration/:path*",
+            "destination": "/decoration/:path*"
+        },
+        {
+            "source": "/v1-rg/api/:path*",
+            "destination": "/robots/v1-rg/api/:path*"
+        },
+        {
+            "source": "/v1-rg/live",
+            "destination": "/robots/v1-rg/frontend/live.html"
+        },
+        {
+            "source": "/v1-rg/mock",
+            "destination": "/robots/v1-rg/frontend/mock.html"
+        },
+        {
+            "source": "/v1-rg/data",
+            "destination": "/robots/v1-rg/frontend/data.html"
+        },
+        {
+            "source": "/v1-rg",
+            "destination": "/robots/v1-rg/frontend/index.html"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/nomia-web/$1"
+        }
+    ]
+}

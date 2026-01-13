@@ -113,6 +113,12 @@
             letter-spacing: 0.1em;
         }
 
+        .invert-warning {
+            filter: invert(1);
+            background: black !important;
+            /* Inverted becomes white */
+        }
+
         .invert-logic {
             background-color: var(--primary) !important;
             color: var(--bg) !important;
@@ -214,7 +220,8 @@
     </style>
 </head>
 
-<body x-data="v1rg()" :class="{ 'glitch-active': !connected && triggerGlitch }">
+<body x-data="v1rg()" :class="{ 'glitch-active': !connected || triggerGlitch, 'invert-warning': !connected }"
+    class="transition-colors duration-100">
     <div class="overlay scanlines"></div>
     <div class="overlay vignette"></div>
 
@@ -229,10 +236,10 @@
 
     <!-- Cinematic Dual-Video Crossfade Engine -->
     <video id="bg-video-1" class="opacity-100" muted playsinline autoplay>
-        <source src="/assets/bg_decoration.mp4" type="video/mp4">
+        <source src="/decoration/bg_decoration.mp4" type="video/mp4">
     </video>
     <video id="bg-video-2" class="opacity-0" muted playsinline>
-        <source src="/assets/bg_decoration.mp4" type="video/mp4">
+        <source src="/decoration/bg_decoration.mp4" type="video/mp4">
     </video>
 
     <div class="relative z-10 h-screen flex flex-col p-6 space-y-4 overflow-hidden">

@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+:root {
+  --background: #050505;
+  --foreground: #ffffff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Interaction Rule: Invert-Logic */
+.invert-logic {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.invert-logic:hover,
+.invert-logic:active,
+.invert-logic.active {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+  border-color: #FFFFFF !important;
+}
+
+/* Scanlines Strategy */
+.scanlines {
+  background: linear-gradient(to bottom,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0) 50%,
+      rgba(0, 0, 0, 0.3) 50%,
+      rgba(0, 0, 0, 0.3));
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 30;
+  position: fixed;
+  inset: 0;
+  opacity: 0.4;
+}
+
+/* Vignette Strategy */
+.vignette {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, transparent 50%, rgba(0, 0, 0, 0.9) 150%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Cinematic Filter for Background */
+.cinematic-bg {
+  filter: grayscale(100%) brightness(30%) contrast(120%);
+}

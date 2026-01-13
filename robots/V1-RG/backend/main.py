@@ -155,7 +155,7 @@ else:
 
 # Mounts (Only active locally, Vercel uses vercel.json rewrites)
 if not IS_VERCEL:
-    app.mount("/assets", StaticFiles(directory=DECORATION_DIR), name="assets")
+    app.mount("/decoration", StaticFiles(directory=DECORATION_DIR), name="decoration")
 
 # --- Endpoints ---
 @app.get("/")
