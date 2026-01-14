@@ -137,30 +137,6 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                         </div>
                     </div>
 
-                    {/* NOMIA Flicker Sequence (Triggered at end) */}
-                    {progress > 90 && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: [0, 1, 0, 1, 0, 1] }}
-                            className="absolute inset-0 bg-white z-[10001] mix-blend-difference pointer-events-none"
-                        />
-                    )}
-
-                    {progress >= 100 && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="absolute inset-0 bg-white z-[10002] flex items-center justify-center"
-                        >
-                            <motion.h1
-                                animate={{ opacity: [0, 1, 0, 1] }}
-                                transition={{ duration: 0.5 }}
-                                className="text-black text-9xl font-black tracking-tighter"
-                            >
-                                NOMIA
-                            </motion.h1>
-                        </motion.div>
-                    )}
                 </motion.div>
             )}
         </AnimatePresence>

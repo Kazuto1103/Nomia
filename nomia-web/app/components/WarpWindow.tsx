@@ -59,29 +59,30 @@ export default function WarpWindow({
                 trigger: windowRef.current,
                 start: "top bottom",
                 end: "bottom top",
-                scrub: true,
+                scrub: 0.5, // Smoother scrub
             }
         });
 
         tl.to(windowRef.current, {
-            y: (index, target) => -200 * speed,
+            y: -150 * speed, // Slightly reduced for stability
+            force3D: true,
             ease: "none",
         });
 
-        // Velocity-based distortion
+        // Velocity-based distortion (Simplified & Lightened)
         let proxy = { skew: 0 };
         let skewSetter = gsap.quickSetter(windowRef.current, "skewY", "deg");
-        let clamp = gsap.utils.clamp(-10, 10);
+        let clamp = gsap.utils.clamp(-5, 5); // Reduced intensity
 
         ScrollTrigger.create({
             onUpdate: (self) => {
-                let skew = clamp(self.getVelocity() / -300);
+                let skew = clamp(self.getVelocity() / -600); // Smoother calculation
                 if (Math.abs(skew) > Math.abs(proxy.skew)) {
                     proxy.skew = skew;
                     gsap.to(proxy, {
                         skew: 0,
-                        duration: 0.8,
-                        ease: "power3",
+                        duration: 1.2,
+                        ease: "power2.out",
                         overwrite: true,
                         onUpdate: () => skewSetter(proxy.skew)
                     });
@@ -120,6 +121,9 @@ export default function WarpWindow({
                 width,
                 height,
                 zIndex: 15,
+                willChange: "transform", // Hardware acceleration
+                backfaceVisibility: "hidden",
+                transformStyle: "preserve-3d"
             }}
             className="pointer-events-none"
         >

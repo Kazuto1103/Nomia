@@ -83,19 +83,53 @@ export default function NomiaLanding() {
         }
       });
 
-      // ENTRY SEQUENCE (NOMIA FLICKER)
-      const tl = gsap.timeline();
-      tl.fromTo(".entry-flicker-overlay",
-        { opacity: 1 },
-        { opacity: 0, duration: 1.5, ease: "power4.inOut" }
-      );
-      tl.from(".hud-flicker-main", {
+      // ENTRY SEQUENCE (MODULAR REVEAL)
+      const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
+
+      // 1. Initial State: Hide everything except NOMIA title
+      gsap.set(".atmospheric-bg, .hud-tagline, .floating-warp-container, .layer-border", { opacity: 0 });
+
+      // 2. NOMIA Title Flicker (Anchor)
+      tl.to(".hud-flicker-main", {
         opacity: 0,
         duration: 0.1,
-        repeat: 10,
+        repeat: 5,
         yoyo: true,
         ease: "none"
-      }, "-=1");
+      });
+
+      // 3. Staggered "Boot-up" Flicker for components (Smoother overlap)
+      tl.to(".atmospheric-bg", {
+        opacity: 0.4, // Persistent visibility
+        duration: 0.1,
+        repeat: 4,
+        yoyo: true,
+        ease: "none",
+        onComplete: () => {
+          gsap.to(".atmospheric-bg", { opacity: 0.4, duration: 1 });
+        }
+      }, "-=0.2"); // Overlap with title flicker
+
+      tl.to(".hud-tagline, .layer-border", {
+        opacity: 1,
+        duration: 0.05,
+        stagger: {
+          each: 0.1,
+          from: "random"
+        },
+        repeat: 1,
+        yoyo: true,
+        ease: "none",
+        onComplete: () => {
+          gsap.to(".hud-tagline, .layer-border", { opacity: 1, duration: 0.5 });
+        }
+      }, "-=0.3");
+
+      tl.to(".floating-warp-container", {
+        opacity: 1,
+        duration: 1.5,
+        ease: "power2.out"
+      }, "-=0.8");
 
     }, containerRef);
 
@@ -137,7 +171,7 @@ export default function NomiaLanding() {
     <main ref={containerRef} className="relative bg-black text-white font-mono selection:bg-white selection:text-black overflow-x-hidden">
 
       {/* GLOBAL ATMOSPHERIC LAYERS */}
-      <div className="fixed inset-0 z-0 pointer-events-none opacity-30 overflow-hidden">
+      <div className="atmospheric-bg fixed inset-0 z-0 pointer-events-none opacity-30 overflow-hidden">
         <video autoPlay loop muted playsInline className="w-full h-full object-cover grayscale opacity-80">
           <source src="/decoration/bg_decoration.mp4" type="video/mp4" />
         </video>
@@ -146,19 +180,16 @@ export default function NomiaLanding() {
       <div className="noise-overlay fixed inset-0 z-[999]" />
       <div className="vignette fixed inset-0 z-[998]" />
 
-      {/* ENTRY FLICKER OVERLAY */}
-      <div className="entry-flicker-overlay fixed inset-0 z-[9999] bg-white pointer-events-none flex items-center justify-center">
-        <h1 className="text-black text-9xl md:text-[12vw] font-black tracking-tighter uppercase">NOMIA</h1>
-      </div>
-
 
       {/* FLOATING WARP SYSTEM (Orchestrated) */}
-      <FloatingWarpSystem />
+      <div className="floating-warp-container">
+        <FloatingWarpSystem />
+      </div>
 
       {/* LAYER 1: THE CORE (IDENTITY) */}
-      <section ref={layer1Ref} className="relative z-20 min-h-screen flex flex-col items-center justify-center p-6 border-b border-white/5">
+      <section ref={layer1Ref} className="layer-border relative z-20 min-h-screen flex flex-col items-center justify-center p-6 border-b border-white/5">
         <div className="reveal-content flex flex-col items-center">
-          <div className="mb-8 flex items-center gap-6 opacity-30">
+          <div className="hud-tagline mb-8 flex items-center gap-6 opacity-30">
             <span className="h-[1px] w-24 bg-white"></span>
             <span className="text-[12px] tracking-[0.8em] uppercase">NOMIA // CORE_SYSTEM_AUTHENTICATED</span>
             <span className="h-[1px] w-24 bg-white"></span>
@@ -168,7 +199,8 @@ export default function NomiaLanding() {
             NOMIA
           </h1>
 
-          <div className="mt-16 max-w-3xl text-center space-y-8 hud-flicker">
+          <div className="hud-tagline mt-16 max-w-3xl text-center space-y-8 hud-flicker">
+
             <p className="text-lg md:text-2xl font-bold tracking-tighter uppercase glow-text">
               REDEFINING INDUSTRIAL AUTOMATION
             </p>
@@ -341,21 +373,25 @@ export default function NomiaLanding() {
       {/* LAYER 6: FOOTER SYSTEM (GATEWAY) */}
       <section ref={layer6Ref} className="relative z-20 min-h-screen flex flex-col items-center justify-center bg-white text-black p-12 overflow-hidden">
         {/* Layer 6 Background Inverted */}
-        <div className="absolute inset-0 z-0 pointer-events-none opacity-40 scale-x-[-1] overflow-hidden grayscale invert">
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-40 overflow-hidden grayscale invert">
           <video
             autoPlay
             loop
             muted
             playsInline
             className="w-full h-full object-cover transition-none"
-            style={{ backfaceVisibility: 'hidden' }}
+            style={{
+              backfaceVisibility: 'hidden',
+              transform: 'translate3d(0,0,0)',
+              perspective: '1000px'
+            }}
           >
             <source src="/decoration/hologram_overlay.mp4" type="video/mp4" />
           </video>
         </div>
 
-        <div className="reveal-content max-w-4xl text-center space-y-10 relative z-10">
-          <ShieldAlert className="w-12 h-12 mx-auto animate-bounce" />
+        <div className="reveal-content max-w-4xl text-center space-y-10 relative z-10 flex flex-col items-center justify-center min-h-[60vh]">
+          <ShieldAlert className="w-12 h-12 mx-auto" />
           <h2 className="text-[6vw] font-black tracking-tighter leading-none">PHANTOM_TERMINAL</h2>
           <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
             <button onClick={navigateToTerminal} className="border-[3px] border-black px-8 py-4 text-sm font-black tracking-widest hover:bg-black hover:text-white transition-all invert-logic">
