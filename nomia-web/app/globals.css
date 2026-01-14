@@ -95,3 +95,29 @@ body {
 .cinematic-bg {
   filter: grayscale(100%) brightness(30%) contrast(120%);
 }
+/* Evangelion-style Aggressive Typography */
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.propaganda-block {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 0.5rem 1rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+}
+
+.border-1px {
+  border-width: 1px;
+}
+
+.noise-overlay {
+  background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+  background-repeat: repeat;
+  opacity: 0.05;
+  pointer-events: none;
+}

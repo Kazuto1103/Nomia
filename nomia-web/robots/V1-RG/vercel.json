@@ -1,0 +1,36 @@
+{
+    "rewrites": [
+        {
+            "source": "/assets/(.*)",
+            "destination": "/decoration/$1"
+        },
+        {
+            "source": "/ws",
+            "destination": "/api/index.py"
+        },
+        {
+            "source": "/command",
+            "destination": "/api/index.py"
+        },
+        {
+            "source": "/live.html",
+            "destination": "/frontend/live.html"
+        },
+        {
+            "source": "/mock.html",
+            "destination": "/frontend/mock.html"
+        },
+        {
+            "source": "/index.html",
+            "destination": "/frontend/index.html"
+        },
+        {
+            "source": "/",
+            "destination": "/frontend/index.html"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/frontend/$1"
+        }
+    ]
+}

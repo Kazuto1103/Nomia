@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOMIA // SYSTEM_PORTAL_v1.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'JetBrains Mono', monospace;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .portal-container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            width: 100%;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .hex-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at center, transparent 30%, #000 90%),
+                url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            opacity: 0.15;
+            z-index: 1;
+        }
+
+        #bg-portal-1,
+        #bg-portal-2 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            filter: grayscale(100%) contrast(150%) brightness(25%);
+            transition: opacity 2s ease-in-out;
+        }
+
+        .hud-overlay {
+            position: fixed;
+            width: 30vw;
+            height: 30vw;
+            z-index: 5;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            opacity: 0.4;
+            /* Crushing blacks to blend with pure #000 */
+            filter: grayscale(100%) brightness(120%) contrast(180%);
+            /* Masking edges to prevent hard rectangles */
+            -webkit-mask-image: radial-gradient(circle, black 30%, transparent 70%);
+            mask-image: radial-gradient(circle, black 30%, transparent 70%);
+        }
+
+        .hud-tl {
+            top: 0;
+            left: 0;
+            transform: scaleX(-1);
+        }
+
+        .hud-br {
+            bottom: 0;
+            right: 0;
+            transform: scaleY(-1);
+        }
+
+        .hologram-vid {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Bottom Left Branding HUD */
+        .proto-branding {
+            position: fixed;
+            bottom: 40px;
+            left: 10px;
+            display: flex;
+            flex-direction: row;
+            /* Side by side */
+            align-items: flex-start;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .proto-line-container {
+            position: relative;
+            width: 1px;
+            height: 196px;
+            /* 16px (ID gap) + 180px (Text) */
+        }
+
+        .proto-line-main {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(to bottom,
+                    #fff 0%,
+                    rgba(255, 255, 255, 0.8) 40%,
+                    rgba(255, 255, 255, 0.1) 80%,
+                    transparent 100%);
+        }
+
+        .proto-dot {
+            position: absolute;
+            top: 0;
+            left: -2px;
+            width: 5px;
+            height: 5px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff;
+        }
+
+        .proto-segments {
+            position: absolute;
+            right: -6px;
+            top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            opacity: 0.15;
+        }
+
+        .proto-segment {
+            width: 1px;
+            height: 30px;
+            background: #fff;
+        }
+
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            line-height: 1.2;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease-out;
+            pointer-events: none;
+        }
+
+        .loading-bar-container {
+            width: 150px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: repeating-linear-gradient(90deg, #fff 0, #fff 10px, transparent 10px, transparent 12px);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            transition: width 2.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .title {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: 0.3em;
+            margin-bottom: 2rem;
+            animation: glitch-text 4s infinite;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .select-card {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 3rem 2rem;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .select-card:hover {
+            border-color: #fff;
+            background: rgba(255, 255, 255, 1);
+            color: #000;
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(255, 255, 255, 0.2);
+        }
+
+        .select-card::before {
+            content: 'READY';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.6rem;
+            opacity: 0.5;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-desc {
+            font-size: 0.7rem;
+            opacity: 0.6;
+            letter-spacing: 0.1em;
+        }
+
+        @keyframes glitch-text {
+
+            0%,
+            90%,
+            100% {
+                transform: skew(0);
+            }
+
+            91% {
+                transform: skew(10deg);
+                filter: invert(1);
+            }
+
+            92% {
+                transform: skew(-10deg);
+            }
+        }
+
+        .scanline {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            z-index: 20;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body x-data="portal()" class="bg-black">
+    <div class="overlay scanlines"></div>
+    <div class="overlay vignette"></div>
+
+    <!-- Cinematic Loading Overlay -->
+    <div class="loading-overlay" :class="isLoading ? 'opacity-100' : 'opacity-0'">
+        <div class="text-xs font-bold tracking-[0.5em] animate-pulse">ESTABLISHING_LINK...</div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" :style="isLoading ? 'width: 100%' : 'width: 0%'"></div>
+        </div>
+        <div class="text-[8px] opacity-40 mt-2 tracking-widest">SECURE_HANDSHAKE_PROTOCOL</div>
+    </div>
+
+    <!-- Cinematic Dual-Video Crossfade Engine -->
+    <video id="bg-portal-1" class="opacity-100" muted playsinline autoplay>
+        <source src="/assets/wireframe_bg.mp4" type="video/mp4">
+    </video>
+    <video id="bg-portal-2" class="opacity-0" muted playsinline>
+        <source src="/assets/wireframe_bg.mp4" type="video/mp4">
+    </video>
+
+    <!-- Corner HUD Projections -->
+    <div class="hud-overlay hud-tl">
+        <video class="hologram-vid" autoplay muted loop playsinline>
+            <source src="/assets/hologram_overlay3.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="hud-overlay hud-br">
+        <video class="hologram-vid" autoplay muted loop playsinline>
+            <source src="/assets/hologram_overlay.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="hex-bg"></div>
+    <div class="scanline" style="z-index: 50;"></div>
+
+    <div class="portal-container">
+        <div class="text-[0.6rem] tracking-[1em] mb-4 opacity-50">YURA_AUTHORIZED_SYSTEM_ACCESS</div>
+        <h1 class="title">NOMIA</h1>
+
+        <div class="option-grid">
+            <a href="live.html" class="select-card group">
+                <div class="card-title">LIVE_SYSTEM</div>
+                <div class="card-desc">DIRECT_CONNECTION // SERIAL_115200</div>
+            </a>
+            <a href="mock.html" class="select-card">
+                <div class="card-title">MOCK_CORE</div>
+                <div class="card-desc">SIMULATED_ENVIRONMENT // PATROL_ALARM_DOCK</div>
+            </a>
+        </div>
+
+        <div class="mt-12 text-[0.5rem] opacity-30 tracking-widest">
+            SECURITY_KEY_VERIFIED: RSA-4096_PASS // SYSTEM_UPTIME_OK
+        </div>
+    </div>
+
+    <!-- Bottom Left HUD -->
+    <div class="proto-branding">
+        <div class="proto-line-container">
+            <div class="proto-line-main"></div>
+            <div class="proto-dot"></div>
+            <div class="proto-segments">
+                <div class="proto-segment"></div>
+                <div class="proto-segment"></div>
+            </div>
+        </div>
+        <div class="flex flex-col">
+            <div class="text-[0.4rem] tracking-[0.3em] opacity-10 mb-4 vertical-text h-[0px]">SEC_SERIAL_ID</div>
+            <div class="text-[10px] font-black tracking-[0.6em] text-white vertical-text h-[180px]">
+                <div class="flex flex-col items-start">
+                    <span x-text="typewriter"></span>
+                    <span class="w-[1px] h-3 bg-white mt-1 animate-pulse"
+                        :class="typewriter.length === fullText.length ? 'opacity-0' : 'opacity-100'"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function portal() {
+            return {
+                typewriter: '',
+                fullText: 'PHANTOM_TERMINAL',
+                isLoading: false,
+                init() {
+                    // Start Loading Sequence
+                    this.isLoading = true;
+                    setTimeout(() => {
+                        this.isLoading = false;
+                    }, 2500);
+
+                    // Typewriter Effect (Delayed start)
+                    setTimeout(() => {
+                        this.startTypewriter();
+                    }, 500);
+
+                    this.initSmoothLoop();
+                },
+                async startTypewriter() {
+                    while (true) {
+                        // Type phase
+                        for (let i = 0; i <= this.fullText.length; i++) {
+                            this.typewriter = this.fullText.substring(0, i);
+                            await new Promise(r => setTimeout(r, 100));
+                        }
+                        // Hold phase
+                        await new Promise(r => setTimeout(r, 6000));
+                        // Delete phase
+                        for (let i = this.fullText.length; i >= 0; i--) {
+                            this.typewriter = this.fullText.substring(0, i);
+                            await new Promise(r => setTimeout(r, 50));
+                        }
+                        // Short reset delay
+                        await new Promise(r => setTimeout(r, 1000));
+                    }
+                },
+                initSmoothLoop() {
+                    const v1 = document.getElementById('bg-portal-1');
+                    const v2 = document.getElementById('bg-portal-2');
+                    v1.muted = v2.muted = true;
+                    let activeVid = v1, nextVid = v2;
+                    const transition = () => {
+                        nextVid.currentTime = 0;
+                        nextVid.play().then(() => {
+                            nextVid.style.opacity = 1; activeVid.style.opacity = 0;
+                            [activeVid, nextVid] = [nextVid, activeVid];
+                            scheduleTransition();
+                        }).catch(() => { activeVid.currentTime = 0; scheduleTransition(); });
+                    };
+                    const scheduleTransition = () => {
+                        const checkPos = () => { if (activeVid.duration > 0 && activeVid.duration - activeVid.currentTime < 1.5) { activeVid.removeEventListener('timeupdate', checkPos); transition(); } };
+                        activeVid.addEventListener('timeupdate', checkPos);
+                    };
+                    v1.play().then(() => scheduleTransition()).catch(() => { window.addEventListener('click', () => { v1.play(); scheduleTransition(); }, { once: true }); });
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
