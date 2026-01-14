@@ -21,6 +21,7 @@ const WARP_DATA = [
         width: "250px",
         height: "250px",
         label: "HALO_SYNC_LINK",
+        isHighlighted: true,
     },
     {
         assetSrc: "/decoration/flower_background.gif",

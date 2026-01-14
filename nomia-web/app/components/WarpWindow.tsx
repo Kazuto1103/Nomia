@@ -20,6 +20,7 @@ interface WarpWindowProps {
     width: string;
     height: string;
     label?: string;
+    isHighlighted?: boolean;
 }
 
 export default function WarpWindow({
@@ -32,6 +33,7 @@ export default function WarpWindow({
     width,
     height,
     label = "DATA_LINK",
+    isHighlighted = false,
 }: WarpWindowProps) {
     const windowRef = useRef<HTMLDivElement>(null);
     const assetRef = useRef<HTMLDivElement>(null);
@@ -128,17 +130,20 @@ export default function WarpWindow({
             className="pointer-events-none"
         >
             <Animator active={isVisible}>
-                <div className="relative w-full h-full p-2 bg-black/40 backdrop-blur-sm group">
+                <div className={`relative w-full h-full p-2 transition-[background-color,backdrop-filter] duration-500 group ${isHighlighted ? "bg-transparent backdrop-blur-none" : "bg-black/40 backdrop-blur-sm"
+                    }`}>
                     {renderFrame()}
 
                     {/* Label Bar */}
-                    <div className="absolute -top-6 left-0 flex items-center gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
+                    <div className={`absolute -top-6 left-0 flex items-center gap-2 transition-opacity duration-300 ${isHighlighted ? "opacity-100" : "opacity-50 group-hover:opacity-100"
+                        }`}>
                         <div className="w-1 h-1 bg-white animate-pulse" />
                         <span className="text-[8px] tracking-[0.3em] font-bold uppercase">{label}</span>
                     </div>
 
                     {/* Asset Container */}
-                    <div className="relative w-full h-full overflow-hidden border border-white/5">
+                    <div className={`relative w-full h-full overflow-hidden border transition-colors duration-300 ${isHighlighted ? "border-white/20" : "border-white/5"
+                        }`}>
                         {assetType === "video" ? (
                             <video
                                 ref={videoRef}
@@ -146,7 +151,8 @@ export default function WarpWindow({
                                 loop
                                 muted
                                 playsInline
-                                className="w-full h-full object-cover grayscale brightness-100 contrast-150"
+                                className={`w-full h-full object-cover grayscale transition-[filter,opacity] duration-500 ${isHighlighted ? "brightness-125 contrast-125 opacity-100" : "brightness-100 contrast-150"
+                                    }`}
                             >
                                 <source src={assetSrc} type="video/mp4" />
                             </video>
@@ -154,13 +160,17 @@ export default function WarpWindow({
                             <img
                                 src={assetSrc}
                                 alt={label}
-                                className={`w-full h-full object-cover grayscale brightness-75 contrast-125 transition-opacity duration-1000 ${isVisible ? "opacity-40" : "opacity-0"
+                                className={`w-full h-full object-cover grayscale transition-[filter,opacity] duration-1000 ${isHighlighted
+                                    ? "brightness-100 contrast-125 opacity-100"
+                                    : `brightness-75 contrast-125 ${isVisible ? "opacity-40" : "opacity-0"}`
                                     }`}
                             />
                         )}
 
-                        {/* Scanline Overlay for each window */}
-                        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_50%,transparent_50%)] bg-[length:100%_4px] pointer-events-none" />
+                        {/* Scanline Overlay for each window - Disabled for highlighted */}
+                        {!isHighlighted && (
+                            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_50%,transparent_50%)] bg-[length:100%_4px] pointer-events-none" />
+                        )}
                     </div>
                 </div>
             </Animator>
