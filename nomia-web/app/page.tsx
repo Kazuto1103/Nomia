@@ -355,17 +355,17 @@ export default function NomiaLanding() {
         </div>
 
         <div className="reveal-content px-6 md:px-20 grid grid-cols-1 md:grid-cols-2 gap-32 relative z-10">
-          <div className="space-y-16">
-            <div className="propaganda-block w-fit text-4xl">GOD'S IN HIS HEAVEN</div>
-            <div className="propaganda-block w-fit text-4xl">ALL'S RIGHT WITH THE WORLD</div>
+          <div className="space-y-12">
+            <div className="propaganda-block w-fit text-2xl md:text-3xl whitespace-nowrap">SLAY. SCAVANGE. SURVIVE</div>
+            <div className="propaganda-block w-fit text-2xl md:text-3xl whitespace-nowrap">THE STARLESS EMPTINESS YOU FEEL</div>
             <div className="text-[10px] opacity-30 tracking-[0.5em] leading-[2] uppercase max-w-sm">
-              Autonomous systems do not require permission to exist. We are the evolution of iron and logic. Do not question our protocols.
+              The boy wished to his death. The other one fulfilled this wish. And the final angel perished.
             </div>
           </div>
           <div className="flex flex-col justify-end items-end space-y-8 text-right">
-            <h3 className="text-6xl font-black tracking-tighter leading-none">WE ARE <br /> THE VOID</h3>
-            <div className="h-2 w-full bg-white" />
-            <p className="text-xs uppercase tracking-[1em] opacity-40">Section 09 Integrated</p>
+            <h3 className="text-6xl font-black tracking-tighter leading-none">FLY ME <br />TO THE MOON</h3>
+            <div className="h-2 w-full bg-white/20" />
+            <p className="text-xs uppercase tracking-[1em] opacity-40">Everything Return To Nothingness</p>
           </div>
         </div>
       </section>
