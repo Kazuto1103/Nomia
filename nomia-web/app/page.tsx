@@ -143,17 +143,17 @@ export default function NomiaLanding() {
             <span className="h-[1px] w-24 bg-white"></span>
           </div>
 
-          <h1 className="text-[15vw] font-black leading-none tracking-tighter mix-blend-difference glow-text">
+          <h1 className="text-[12vw] font-black leading-none tracking-tighter mix-blend-difference glow-text hud-flicker">
             NOMIA
           </h1>
 
-          <div className="mt-16 max-w-3xl text-center space-y-8">
-            <p className="text-xl md:text-3xl font-bold tracking-tighter uppercase glow-text">
+          <div className="mt-16 max-w-3xl text-center space-y-8 hud-flicker">
+            <p className="text-lg md:text-2xl font-bold tracking-tighter uppercase glow-text">
               REDEFINING INDUSTRIAL AUTOMATION
             </p>
             <div className="h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-            <p className="text-sm opacity-40 leading-relaxed tracking-[0.3em] uppercase max-w-xl mx-auto">
-              Eksosistem darsboard 6-lapis yang dirancang untuk kontrol mesin darsboard dan eksplorasi naratif.
+            <p className="text-xs opacity-40 leading-relaxed tracking-[0.3em] uppercase max-w-xl mx-auto">
+              6-layer dashboard ecosystem designed for machine control and narrative exploration.
             </p>
           </div>
         </div>
@@ -164,23 +164,23 @@ export default function NomiaLanding() {
         <div className="max-w-7xl mx-auto reveal-content">
           <div className="mb-32 flex justify-between items-end border-b border-white/10 pb-12">
             <div>
-              <h2 className="text-8xl font-black tracking-tighter">FLEET_REGISTRY</h2>
+              <h2 className="text-6xl font-black tracking-tighter">FLEET_REGISTRY</h2>
               <p className="text-xs tracking-[0.5em] opacity-30 mt-4">PHANTOM_CLASS_UNITS_ONLY</p>
             </div>
             <div className="text-right">
               <p className="text-[10px] tracking-widest opacity-40">U_ID</p>
-              <p className="text-5xl font-mono">RG_01</p>
+              <p className="text-4xl font-mono">RG_TOTAL</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* V1-RG (ACTIVE) */}
             <div
               onClick={() => router.push("/robots/v1-rg")}
-              className="group relative min-h-[500px] border border-white/10 bg-black/60 overflow-hidden invert-logic cursor-pointer p-12 flex flex-col justify-between"
+              className="group relative min-h-[400px] border border-white/10 bg-black/60 overflow-hidden invert-logic cursor-pointer p-8 flex flex-col justify-between"
             >
               <div className="flex justify-between items-start">
-                <Cpu className="w-16 h-16 opacity-40" />
+                <Cpu className="w-12 h-12 opacity-40" />
                 <div className="text-right">
                   <div className="text-[10px] tracking-widest bg-white/10 px-2 py-1 mb-2">STATUS: ONLINE</div>
                   <div className="text-[8px] opacity-50 font-mono">0x2F3A1B</div>
@@ -188,27 +188,46 @@ export default function NomiaLanding() {
               </div>
 
               <div>
-                <h3 className="text-6xl font-black tracking-tighter mb-4">V1-RG</h3>
-                <p className="text-sm opacity-60 leading-relaxed font-sans max-w-sm">
-                  Unit eksplorasi otonom dengan sensor ultra-proximity dan uplink telemetri real-time.
+                <h3 className="text-4xl font-black tracking-tighter mb-4">V1-RG</h3>
+                <p className="text-[10px] opacity-60 leading-relaxed font-sans max-w-sm uppercase">
+                  Autonomous exploration unit with ultra-proximity sensors and real-time telemetry uplink.
                 </p>
               </div>
 
-              <div className="flex items-center justify-between pt-12 border-t border-white/10">
-                <button onClick={() => setShowTechSpecs(true)} className="flex items-center gap-3 text-[10px] tracking-[0.4em] uppercase hover:underline">
+              <div className="flex items-center justify-between pt-8 border-t border-white/10">
+                <button onClick={(e) => { e.stopPropagation(); setShowTechSpecs(true); }} className="flex items-center gap-3 text-[8px] tracking-[0.4em] uppercase hover:underline">
                   <Database className="w-4 h-4" /> [ VIEW_blueprints ]
                 </button>
-                <ArrowRight className="w-8 h-8" />
+                <ArrowRight className="w-6 h-6" />
               </div>
             </div>
 
-            {/* K4ZU & ZN-01 (LOCKED) */}
-            <div className="relative min-h-[500px] border border-white/5 bg-[url('/assets/grid.png')] bg-opacity-5 flex items-center justify-center opacity-30 grayscale">
-              <div className="text-center p-12 border border-white/10 backdrop-blur-md">
-                <AlertTriangle className="w-12 h-12 mx-auto mb-6 opacity-40" />
-                <h3 className="text-3xl font-black tracking-tighter mb-2">K4ZU // ENCRYPTED</h3>
-                <p className="text-[10px] tracking-[0.6em] uppercase">Hardware Schematics Locked</p>
+            {/* K4ZU Variation */}
+            <div className="relative min-h-[400px] border border-white/5 bg-black/20 p-8 flex flex-col justify-between opacity-40 grayscale group hover:opacity-100 transition-all border-dashed">
+              <div className="flex justify-between items-start">
+                <ShieldAlert className="w-12 h-12 opacity-20" />
+                <div className="text-right text-[8px] opacity-50 font-mono">ENC_SYS_0X1</div>
               </div>
+              <div className="text-center py-12">
+                <h3 className="text-3xl font-black tracking-tighter mb-2">K4ZU</h3>
+                <p className="text-[8px] tracking-[0.6em] uppercase opacity-40">Heavy Combat Variation</p>
+                <div className="mt-4 inline-block px-3 py-1 border border-white/20 text-[8px]">ENCRYPTED</div>
+              </div>
+              <div className="pt-8 border-t border-white/5 text-[8px] tracking-widest opacity-20">ACCESS_DENIED</div>
+            </div>
+
+            {/* ZN-01 Variation */}
+            <div className="relative min-h-[400px] border border-white/5 bg-black/20 p-8 flex flex-col justify-between opacity-40 grayscale group hover:opacity-100 transition-all border-dashed">
+              <div className="flex justify-between items-start">
+                <Activity className="w-12 h-12 opacity-20" />
+                <div className="text-right text-[8px] opacity-50 font-mono">ENC_SYS_0X2</div>
+              </div>
+              <div className="text-center py-12">
+                <h3 className="text-3xl font-black tracking-tighter mb-2">ZN-01</h3>
+                <p className="text-[8px] tracking-[0.6em] uppercase opacity-40">Stealth Recon Unit</p>
+                <div className="mt-4 inline-block px-3 py-1 border border-white/20 text-[8px]">WAIT_LIST</div>
+              </div>
+              <div className="pt-8 border-t border-white/5 text-[8px] tracking-widest opacity-20">ACCESS_DENIED</div>
             </div>
           </div>
         </div>
@@ -233,7 +252,7 @@ export default function NomiaLanding() {
             <div className="inline-block border border-white px-6 py-2">
               <span className="text-xs font-bold tracking-[1em] uppercase">TECH_ANALYSIS</span>
             </div>
-            <h2 className="text-7xl font-black tracking-tighter leading-none">SENSOR_GRID & <br /> CORE_LOGIC</h2>
+            <h2 className="text-5xl font-black tracking-tighter leading-none">SENSOR_GRID & <br /> CORE_LOGIC</h2>
             <div className="grid grid-cols-2 gap-8 text-[10px] font-mono opacity-50">
               <div className="space-y-4">
                 <p>LIDAR: ENABLED [360deg]</p>
@@ -254,7 +273,7 @@ export default function NomiaLanding() {
       <section ref={layer4Ref} className="relative z-20 py-64 h-screen overflow-hidden bg-white text-black flex items-center">
         <div className="propaganda-scroll flex gap-20 whitespace-nowrap">
           {[...Array(5)].map((_, i) => (
-            <h2 key={i} className="text-[25vh] font-black tracking-tighter leading-none">
+            <h2 key={i} className="text-[18vh] font-black tracking-tighter leading-none">
               NOMIA // DANGER // PROTOCOL // Dystopian.Industrial.Automated. //
             </h2>
           ))}
@@ -272,17 +291,26 @@ export default function NomiaLanding() {
       </section>
 
       {/* LAYER 5: PROPAGANDA II (DENSE QUOTES) */}
-      <section ref={layer5Ref} className="relative z-20 py-48 bg-black">
-        <div className="reveal-content px-6 md:px-20 grid grid-cols-1 md:grid-cols-2 gap-32">
+      <section ref={layer5Ref} className="relative z-20 py-48 bg-black overflow-hidden">
+        {/* Layer 5 Background Decoration */}
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-20 parallax-bg">
+          <img
+            src="/decoration/bg_decoration_eva.jpeg"
+            alt="EVA Decoration"
+            className="w-full h-full object-cover grayscale dim-glow-animation"
+          />
+        </div>
+
+        <div className="reveal-content px-6 md:px-20 grid grid-cols-1 md:grid-cols-2 gap-32 relative z-10">
           <div className="space-y-16">
             <div className="propaganda-block w-fit text-4xl">GOD'S IN HIS HEAVEN</div>
             <div className="propaganda-block w-fit text-4xl">ALL'S RIGHT WITH THE WORLD</div>
-            <div className="text-[12px] opacity-30 tracking-[0.5em] leading-[2] uppercase max-w-sm">
-              Sistem otonom tidak membutuhkan izin untuk ada. Kami adalah evolusi dari besi dan logika. Jangan pertanyakan protokol kami.
+            <div className="text-[10px] opacity-30 tracking-[0.5em] leading-[2] uppercase max-w-sm">
+              Autonomous systems do not require permission to exist. We are the evolution of iron and logic. Do not question our protocols.
             </div>
           </div>
           <div className="flex flex-col justify-end items-end space-y-8 text-right">
-            <h3 className="text-8xl font-black tracking-tighter leading-none">WE ARE <br /> THE VOID</h3>
+            <h3 className="text-6xl font-black tracking-tighter leading-none">WE ARE <br /> THE VOID</h3>
             <div className="h-2 w-full bg-white" />
             <p className="text-xs uppercase tracking-[1em] opacity-40">Section 09 Integrated</p>
           </div>
@@ -290,22 +318,36 @@ export default function NomiaLanding() {
       </section>
 
       {/* LAYER 6: FOOTER SYSTEM (GATEWAY) */}
-      <section ref={layer6Ref} className="relative z-20 min-h-screen flex flex-col items-center justify-center bg-white text-black p-12">
-        <div className="reveal-content max-w-4xl text-center space-y-16">
-          <ShieldAlert className="w-24 h-24 mx-auto animate-bounce" />
-          <h2 className="text-[10vw] font-black tracking-tighter leading-none">PHANTOM_TERMINAL</h2>
-          <div className="flex flex-col md:flex-row gap-8 justify-center">
-            <button onClick={navigateToTerminal} className="border-4 border-black px-12 py-6 text-xl font-black tracking-widest hover:bg-black hover:text-white transition-all invert-logic">
+      <section ref={layer6Ref} className="relative z-20 min-h-screen flex flex-col items-center justify-center bg-white text-black p-12 overflow-hidden">
+        {/* Layer 6 Background Inverted */}
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-40 scale-x-[-1] overflow-hidden grayscale invert">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover transition-none"
+            style={{ backfaceVisibility: 'hidden' }}
+          >
+            <source src="/decoration/hologram_overlay.mp4" type="video/mp4" />
+          </video>
+        </div>
+
+        <div className="reveal-content max-w-4xl text-center space-y-10 relative z-10">
+          <ShieldAlert className="w-12 h-12 mx-auto animate-bounce" />
+          <h2 className="text-[6vw] font-black tracking-tighter leading-none">PHANTOM_TERMINAL</h2>
+          <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
+            <button onClick={navigateToTerminal} className="border-[3px] border-black px-8 py-4 text-sm font-black tracking-widest hover:bg-black hover:text-white transition-all invert-logic">
               [ INITIALIZE_TERMINAL ]
             </button>
-            <div className="text-left md:border-l-4 border-black pl-8 flex items-center">
-              <p className="text-xs font-bold uppercase tracking-widest leading-relaxed">
+            <div className="text-left md:border-l-[3px] border-black pl-8 flex items-center">
+              <p className="text-[9px] font-bold uppercase tracking-widest leading-relaxed opacity-70">
                 Direct access to experimental robot nodes. <br />
                 Authorization level 05 required.
               </p>
             </div>
           </div>
-          <div className="pt-32 flex justify-between items-center text-[10px] font-black tracking-[0.5em] opacity-50 border-t border-black/10">
+          <div className="pt-24 flex justify-between items-center text-[9px] font-black tracking-[0.4em] opacity-40 border-t border-black/10">
             <span>NOMIA // HUB // V2.0</span>
             <span>© KAZUTO // 2026</span>
           </div>
@@ -333,6 +375,33 @@ export default function NomiaLanding() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <style jsx global>{`
+        @keyframes hud-flicker {
+          0% { opacity: 0.1; }
+          4% { opacity: 0.8; }
+          8% { opacity: 0.2; }
+          12% { opacity: 0.9; }
+          16% { opacity: 0.3; }
+          20% { opacity: 1; }
+          100% { opacity: 1; }
+        }
+        .hud-flicker {
+          animation: hud-flicker 0.8s ease-in-out forwards;
+        }
+        .vertical-text {
+          writing-mode: vertical-rl;
+          text-orientation: mixed;
+        }
+        @keyframes dim-glow {
+          0% { filter: brightness(0.5) contrast(1.2); opacity: 0.3; }
+          50% { filter: brightness(1.0) contrast(1.4); opacity: 0.6; }
+          100% { filter: brightness(0.5) contrast(1.2); opacity: 0.3; }
+        }
+        .dim-glow-animation {
+          animation: dim-glow 4s ease-in-out infinite;
+        }
+      `}</style>
 
     </main>
   );
