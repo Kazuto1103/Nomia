@@ -142,7 +142,7 @@ export default function WarpWindow({
                                 loop
                                 muted
                                 playsInline
-                                className="w-full h-full object-cover grayscale brightness-50 contrast-125"
+                                className="w-full h-full object-cover grayscale brightness-100 contrast-150"
                             >
                                 <source src={assetSrc} type="video/mp4" />
                             </video>

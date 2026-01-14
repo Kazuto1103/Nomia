@@ -137,44 +137,32 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                         </div>
                     </div>
 
-                    {/* Glitch Overlay (Triggered at end) */}
-                    {progress > 95 && (
+                    {/* NOMIA Flicker Sequence (Triggered at end) */}
+                    {progress > 90 && (
                         <motion.div
                             initial={{ opacity: 0 }}
-                            animate={{ opacity: [0, 1, 0, 1, 0] }}
-                            className="absolute inset-0 bg-white/20 mix-blend-difference pointer-events-none"
+                            animate={{ opacity: [0, 1, 0, 1, 0, 1] }}
+                            className="absolute inset-0 bg-white z-[10001] mix-blend-difference pointer-events-none"
                         />
                     )}
 
-                    {/* Cursor Follower */}
-                    <CursorFollower isPressed={isPressed} />
+                    {progress >= 100 && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="absolute inset-0 bg-white z-[10002] flex items-center justify-center"
+                        >
+                            <motion.h1
+                                animate={{ opacity: [0, 1, 0, 1] }}
+                                transition={{ duration: 0.5 }}
+                                className="text-black text-9xl font-black tracking-tighter"
+                            >
+                                NOMIA
+                            </motion.h1>
+                        </motion.div>
+                    )}
                 </motion.div>
             )}
         </AnimatePresence>
-    );
-}
-
-function CursorFollower({ isPressed }: { isPressed: boolean }) {
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            setMousePos({ x: e.clientX, y: e.clientY });
-        };
-        window.addEventListener("mousemove", handleMouseMove);
-        return () => window.removeEventListener("mousemove", handleMouseMove);
-    }, []);
-
-    return (
-        <motion.div
-            animate={{
-                x: mousePos.x - 20,
-                y: mousePos.y - 20,
-                scale: isPressed ? 1.5 : 1,
-            }}
-            className="fixed top-0 left-0 w-10 h-10 border border-white rounded-full pointer-events-none z-[10001] flex items-center justify-center opacity-50"
-        >
-            <div className="w-1 h-1 bg-white rounded-full" />
-        </motion.div>
     );
 }

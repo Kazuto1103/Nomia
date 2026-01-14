@@ -83,7 +83,22 @@ export default function NomiaLanding() {
         }
       });
 
+      // ENTRY SEQUENCE (NOMIA FLICKER)
+      const tl = gsap.timeline();
+      tl.fromTo(".entry-flicker-overlay",
+        { opacity: 1 },
+        { opacity: 0, duration: 1.5, ease: "power4.inOut" }
+      );
+      tl.from(".hud-flicker-main", {
+        opacity: 0,
+        duration: 0.1,
+        repeat: 10,
+        yoyo: true,
+        ease: "none"
+      }, "-=1");
+
     }, containerRef);
+
 
     return () => ctx.revert();
   }, [handshakeComplete]);
@@ -122,14 +137,20 @@ export default function NomiaLanding() {
     <main ref={containerRef} className="relative bg-black text-white font-mono selection:bg-white selection:text-black overflow-x-hidden">
 
       {/* GLOBAL ATMOSPHERIC LAYERS */}
-      <div className="fixed inset-0 z-0 pointer-events-none opacity-10 overflow-hidden">
-        <video autoPlay loop muted playsInline className="w-full h-full object-cover grayscale opacity-50">
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-30 overflow-hidden">
+        <video autoPlay loop muted playsInline className="w-full h-full object-cover grayscale opacity-80">
           <source src="/decoration/bg_decoration.mp4" type="video/mp4" />
         </video>
       </div>
       <div className="scanlines fixed inset-0 pointer-events-none z-[1000] opacity-30" />
       <div className="noise-overlay fixed inset-0 z-[999]" />
       <div className="vignette fixed inset-0 z-[998]" />
+
+      {/* ENTRY FLICKER OVERLAY */}
+      <div className="entry-flicker-overlay fixed inset-0 z-[9999] bg-white pointer-events-none flex items-center justify-center">
+        <h1 className="text-black text-9xl md:text-[12vw] font-black tracking-tighter uppercase">NOMIA</h1>
+      </div>
+
 
       {/* FLOATING WARP SYSTEM (Orchestrated) */}
       <FloatingWarpSystem />
@@ -143,7 +164,7 @@ export default function NomiaLanding() {
             <span className="h-[1px] w-24 bg-white"></span>
           </div>
 
-          <h1 className="text-[12vw] font-black leading-none tracking-tighter mix-blend-difference glow-text hud-flicker">
+          <h1 className="text-9xl md:text-[12vw] font-black leading-none tracking-tighter mix-blend-difference glow-text hud-flicker-main">
             NOMIA
           </h1>
 
