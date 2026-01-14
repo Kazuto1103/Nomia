@@ -2,6 +2,8 @@
 
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
+import gsap from "gsap";
+
 
 interface LoadingScreenProps {
     onComplete: () => void;
@@ -14,6 +16,31 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
     const requestRef = useRef<number>(null);
 
     const pulseControls = useAnimation();
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const [randomVideo, setRandomVideo] = useState<string>("");
+
+    // Session Randomization: Pick 1 of 3 videos on mount
+    useEffect(() => {
+        const videos = [
+            "/decoration/loading_background1.mp4",
+            "/decoration/loading_background2.mp4",
+            "/decoration/loading_background3.mp4"
+        ];
+        const selected = videos[Math.floor(Math.random() * videos.length)];
+        setRandomVideo(selected);
+    }, []);
+
+    // Adaptive Playback Rate (Smoothed with GSAP)
+    useEffect(() => {
+        if (videoRef.current) {
+            const targetSpeed = isPressed ? 1.0 + (progress / 100) * 3.0 : 0.5;
+            gsap.to(videoRef.current, {
+                playbackRate: targetSpeed,
+                duration: 0.5,
+                ease: "power2.out"
+            });
+        }
+    }, [isPressed, progress]);
 
     // Physics loop for pressure
     useEffect(() => {
@@ -39,7 +66,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
     const handleTriggerComplete = () => {
         setIsExiting(true);
-        // Sequence: Flicker -> Glitch -> Complete
+        // Sequence: Complete
         setTimeout(() => {
             onComplete();
         }, 800);
@@ -58,8 +85,26 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                     onTouchStart={() => setIsPressed(true)}
                     onTouchEnd={() => setIsPressed(false)}
                 >
+                    {/* Background Dynamic Video (Session Randomized) */}
+                    <div className="absolute inset-0 z-0 opacity-20 grayscale pointer-events-none overflow-hidden" style={{ willChange: "transform", transform: "translate3d(0,0,0)" }}>
+                        {randomVideo && (
+                            <video
+                                ref={videoRef}
+                                key={randomVideo}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
+                                style={{ backfaceVisibility: "hidden" }}
+                            >
+                                <source src={randomVideo} type="video/mp4" />
+                            </video>
+                        )}
+                    </div>
+
                     {/* Background Noise/Scanlines */}
-                    <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat" />
+                    <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat z-10" />
 
                     <div className="relative flex items-center justify-center w-full h-full">
                         {/* RADAR CIRCLES */}
