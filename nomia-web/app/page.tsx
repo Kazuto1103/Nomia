@@ -345,12 +345,12 @@ export default function NomiaLanding() {
 
       {/* LAYER 5: PROPAGANDA II (DENSE QUOTES) */}
       <section ref={layer5Ref} className="relative z-20 py-48 bg-black overflow-hidden">
-        {/* Layer 5 Background Decoration */}
-        <div className="absolute inset-0 z-0 pointer-events-none opacity-20 parallax-bg">
+        {/* Layer 5 Background Decoration - Mirrored & Right Aligned */}
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-20 parallax-bg overflow-hidden">
           <img
             src="/decoration/bg_decoration_eva.jpeg"
             alt="EVA Decoration"
-            className="w-full h-full object-cover grayscale dim-glow-animation"
+            className="w-full h-full object-cover grayscale dim-glow-animation scale-x-[-1] object-right"
           />
         </div>
 
@@ -364,7 +364,7 @@ export default function NomiaLanding() {
           </div>
           <div className="flex flex-col justify-end items-end space-y-8 text-right">
             <h3 className="text-6xl font-black tracking-tighter leading-none">FLY ME <br />TO THE MOON</h3>
-            <div className="h-2 w-full bg-white/20" />
+            <div className="h-2 w-full bg-white/30" />
             <p className="text-xs uppercase tracking-[1em] opacity-40">Everything Return To Nothingness</p>
           </div>
         </div>
