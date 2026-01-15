@@ -83,6 +83,31 @@ export default function NomiaLanding() {
         }
       });
 
+      // LUNAR HUD: Scroll-Triggered Rotation & Drift
+      gsap.to(".moon-asset-parallax", {
+        rotation: 15,
+        y: -30,
+        ease: "none",
+        scrollTrigger: {
+          trigger: layer5Ref.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1.5,
+        }
+      });
+
+      // Lunar HUD Container: Subtle Scale Pulse
+      gsap.to(".lunar-hud-container", {
+        scale: 1.05,
+        ease: "none",
+        scrollTrigger: {
+          trigger: layer5Ref.current,
+          start: "top center",
+          end: "bottom center",
+          scrub: 2,
+        }
+      });
+
       // ENTRY SEQUENCE (MODULAR REVEAL)
       const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
 
@@ -363,13 +388,39 @@ export default function NomiaLanding() {
             </div>
           </div>
           <div className="flex flex-col justify-end items-end space-y-8 text-right">
-            {/* Moon Hologram with Parallax Resonance */}
-            <div className="w-32 h-32 md:w-48 md:h-48 relative overflow-hidden parallax-bg">
-              <img
-                src="/decoration/hologram_moon2.gif"
-                alt="Moon Hologram"
-                className="w-full h-full object-contain grayscale opacity-60 dim-glow-animation"
-              />
+            {/* TACTICAL LUNAR HUD */}
+            <div className="relative group lunar-hud-container">
+              {/* Corner Brackets */}
+              <div className="absolute -top-4 -left-4 w-4 h-4 border-t-2 border-l-2 border-white/40" />
+              <div className="absolute -top-4 -right-4 w-4 h-4 border-t-2 border-r-2 border-white/40" />
+              <div className="absolute -bottom-4 -left-4 w-4 h-4 border-b-2 border-l-2 border-white/40" />
+              <div className="absolute -bottom-4 -right-4 w-4 h-4 border-b-2 border-r-2 border-white/40" />
+
+              {/* Orbital Data Overlay */}
+              <div className="absolute -right-24 top-0 flex flex-col items-start gap-1 text-[8px] font-bold tracking-widest opacity-40 uppercase">
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-white animate-pulse" />
+                  <span>Lunar_Pos: 384.4k_km</span>
+                </div>
+                <div>Phase: Waxing_Gibbous</div>
+                <div>Sync: 99.2%</div>
+              </div>
+
+              {/* Main Moon Container with Scroll Resonance */}
+              <div className="w-32 h-32 md:w-48 md:h-48 relative overflow-hidden moon-asset-parallax">
+                {/* Rotating HUD Ring */}
+                <div className="absolute inset-0 border border-white/5 rounded-full animate-spin-slow opacity-20" />
+                <div className="absolute inset-0 border-t border-white/20 rounded-full animate-spin-slow-reverse" />
+
+                <img
+                  src="/decoration/moon.png"
+                  alt="Nomia Moon"
+                  className="w-full h-full object-contain grayscale brightness-125 contrast-125 opacity-70 filter drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]"
+                />
+
+                {/* Scanline Overlay */}
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_50%,transparent_50%)] bg-[length:100%_4px] pointer-events-none" />
+              </div>
             </div>
             <h3 className="text-6xl font-black tracking-tighter leading-none">FLY ME <br />TO THE MOON</h3>
             <div className="h-2 w-full bg-white/30" />
