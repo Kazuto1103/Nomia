@@ -38,19 +38,25 @@ export default function MechaTechSpecs({ isOpen, onClose }: TechSpecsProps) {
     const [showContent, setShowContent] = useState(false);
 
     useEffect(() => {
+        let timeouts: NodeJS.Timeout[] = [];
+
         if (isOpen) {
             setAnimationStage(0);
             setShowContent(false);
 
             // Faster animation sequence
-            setTimeout(() => setAnimationStage(1), 50);
-            setTimeout(() => setAnimationStage(2), 200);
-            setTimeout(() => setAnimationStage(3), 400);
-            setTimeout(() => {
+            timeouts.push(setTimeout(() => setAnimationStage(1), 50));
+            timeouts.push(setTimeout(() => setAnimationStage(2), 200));
+            timeouts.push(setTimeout(() => setAnimationStage(3), 400));
+            timeouts.push(setTimeout(() => {
                 setAnimationStage(4);
                 setShowContent(true);
-            }, 600);
+            }, 600));
         }
+
+        return () => {
+            timeouts.forEach(clearTimeout);
+        };
     }, [isOpen]);
 
     return (

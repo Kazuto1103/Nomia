@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Terminal, Radio, ShieldAlert, Cpu } from "lucide-react";
 import Link from "next/link";
 
@@ -10,6 +10,8 @@ export default function V1RGEntry() {
     const [typewriter, setTypewriter] = useState("");
     const fullText = "PHANTOM_TERMINAL";
 
+    const typeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
     useEffect(() => {
         // Loading Sequence
         const timer = setTimeout(() => setIsLoading(false), 2500);
@@ -17,6 +19,7 @@ export default function V1RGEntry() {
         // Typewriter Effect
         let i = 0;
         let isDeleting = false;
+
         const type = () => {
             const current = isDeleting
                 ? fullText.substring(0, i - 1)
@@ -26,19 +29,25 @@ export default function V1RGEntry() {
             i = isDeleting ? i - 1 : i + 1;
 
             if (!isDeleting && i === fullText.length) {
-                setTimeout(() => isDeleting = true, 3000);
+                // Wait before deleting
+                typeTimeoutRef.current = setTimeout(() => {
+                    isDeleting = true;
+                    type();
+                }, 3000);
             } else if (isDeleting && i === 0) {
                 isDeleting = false;
+                typeTimeoutRef.current = setTimeout(type, 150);
+            } else {
+                typeTimeoutRef.current = setTimeout(type, isDeleting ? 50 : 150);
             }
-
-            setTimeout(type, isDeleting ? 50 : 150);
         };
 
-        const typeTimer = setTimeout(type, 500);
+        // Start typing loop
+        typeTimeoutRef.current = setTimeout(type, 500);
 
         return () => {
             clearTimeout(timer);
-            clearTimeout(typeTimer);
+            if (typeTimeoutRef.current) clearTimeout(typeTimeoutRef.current);
         };
     }, []);
 

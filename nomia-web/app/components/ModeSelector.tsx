@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Radio, Terminal, ShieldCheck } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface ModeSelectorProps {
     isOpen: boolean;
@@ -24,6 +24,14 @@ export default function ModeSelector({ isOpen, onClose }: ModeSelectorProps) {
         }
     }, [isOpen]);
 
+    const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
+
+    useEffect(() => {
+        return () => {
+            timeoutsRef.current.forEach(clearTimeout);
+        };
+    }, []);
+
     const handleModeSelect = (mode: "live" | "mock") => {
         setSelectedMode(mode);
         setState("AUTHENTICATING");
@@ -41,14 +49,16 @@ export default function ModeSelector({ isOpen, onClose }: ModeSelectorProps) {
         let delay = 0;
         steps.forEach((step, index) => {
             delay += 600 + Math.random() * 400;
-            setTimeout(() => {
+            const t1 = setTimeout(() => {
                 setAuthLog(prev => [...prev, step]);
                 if (index === steps.length - 1) {
-                    setTimeout(() => {
+                    const t2 = setTimeout(() => {
                         window.location.href = mode === "live" ? "/v1-rg/live" : "/v1-rg/mock";
                     }, 800);
+                    timeoutsRef.current.push(t2);
                 }
             }, delay);
+            timeoutsRef.current.push(t1);
         });
     };
 

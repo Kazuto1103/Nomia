@@ -56,29 +56,36 @@ export default function WarpWindow({
         if (windowRef.current) observer.observe(windowRef.current);
 
         // GSAP Parallax & Distortion
+        let st: ScrollTrigger | undefined;
+        let pSt: ScrollTrigger | undefined;
+
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: windowRef.current,
                 start: "top bottom",
                 end: "bottom top",
-                scrub: 0.5, // Smoother scrub
+                scrub: 0.5,
             }
         });
+        // Capture the scrollTrigger instance from the timeline if accessible, or relying on the loop is actually standard if not stored.
+        // Better pattern: ScrollTrigger.create returns an instance.
+        // But here we attach to timeline. Timeline has .scrollTrigger property.
+        st = tl.scrollTrigger;
 
         tl.to(windowRef.current, {
-            y: -150 * speed, // Slightly reduced for stability
+            y: -150 * speed,
             force3D: true,
             ease: "none",
         });
 
-        // Velocity-based distortion (Simplified & Lightened)
+        // Velocity-based distortion
         let proxy = { skew: 0 };
         let skewSetter = gsap.quickSetter(windowRef.current, "skewY", "deg");
-        let clamp = gsap.utils.clamp(-5, 5); // Reduced intensity
+        let clamp = gsap.utils.clamp(-5, 5);
 
-        ScrollTrigger.create({
+        pSt = ScrollTrigger.create({
             onUpdate: (self) => {
-                let skew = clamp(self.getVelocity() / -600); // Smoother calculation
+                let skew = clamp(self.getVelocity() / -600);
                 if (Math.abs(skew) > Math.abs(proxy.skew)) {
                     proxy.skew = skew;
                     gsap.to(proxy, {
@@ -94,9 +101,9 @@ export default function WarpWindow({
 
         return () => {
             observer.disconnect();
-            ScrollTrigger.getAll().forEach(st => {
-                if (st.trigger === windowRef.current) st.kill();
-            });
+            if (st) st.kill();
+            if (pSt) pSt.kill();
+            tl.kill(); // Ensure timeline is killed
         };
     }, [speed]);
 

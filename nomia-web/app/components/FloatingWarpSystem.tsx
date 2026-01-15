@@ -43,8 +43,21 @@ const WARP_DATA = [
     },
 ];
 
+interface WarpWindowData {
+    assetSrc: string;
+    assetType: "video" | "image" | "gif";
+    frameType: "neffos" | "underline" | "lines";
+    speed: number;
+    width: string;
+    height: string;
+    label: string;
+    isHighlighted?: boolean;
+    initialX: string;
+    initialY: string;
+}
+
 export default function FloatingWarpSystem() {
-    const [windows, setWindows] = useState<any[]>([]);
+    const [windows, setWindows] = useState<WarpWindowData[]>([]);
 
     useEffect(() => {
         // Generate randomized positions that avoid the center (roughly 30% to 70% width)
