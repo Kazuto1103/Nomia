@@ -85,7 +85,7 @@ export default function NomiaLanding() {
 
       // LUNAR HUD: Scroll-Triggered Rotation & Drift
       gsap.to(".moon-asset-parallax", {
-        rotation: 15,
+        rotation: 2,
         y: -30,
         ease: "none",
         scrollTrigger: {
@@ -317,7 +317,9 @@ export default function NomiaLanding() {
           <div className="w-full md:w-1/2 relative">
             <div className="absolute -inset-10 bg-white/5 blur-3xl rounded-full" />
             <div className="relative border border-white/20 p-4 aspect-square flex items-center justify-center overflow-hidden">
-              <div className="absolute inset-0 bg-[url('/decoration/hologram_overlay2.mp4')] opacity-20 mix-blend-screen" />
+              <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-screen">
+                <source src="/decoration/hologram_overlay2.mp4" type="video/mp4" />
+              </video>
               <Zap className="w-64 h-64 text-white opacity-10 animate-pulse" />
               <div className="absolute top-0 left-0 w-full h-full border border-white/5 grid grid-cols-12 grid-rows-12">
                 {[...Array(144)].map((_, i) => (
@@ -407,13 +409,13 @@ export default function NomiaLanding() {
               </div>
 
               {/* Main Moon Container with Scroll Resonance */}
-              <div className="w-32 h-32 md:w-48 md:h-48 relative overflow-hidden moon-asset-parallax">
+              <div className="w-24 h-24 md:w-32 md:h-32 relative overflow-hidden moon-asset-parallax glitch-periodic">
                 {/* Rotating HUD Ring */}
                 <div className="absolute inset-0 border border-white/5 rounded-full animate-spin-slow opacity-20" />
                 <div className="absolute inset-0 border-t border-white/20 rounded-full animate-spin-slow-reverse" />
 
                 <img
-                  src="/decoration/moon.png"
+                  src="/decoration/Moon.png"
                   alt="Nomia Moon"
                   className="w-full h-full object-contain grayscale brightness-125 contrast-125 opacity-70 filter drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]"
                 />
