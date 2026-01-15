@@ -391,18 +391,18 @@ export default function NomiaLanding() {
           </div>
           <div className="flex flex-col justify-end items-end space-y-8 text-right">
             {/* TACTICAL LUNAR HUD */}
-            <div className="relative group lunar-hud-container">
+            <div className="relative group lunar-hud-container mr-4">
               {/* Corner Brackets */}
               <div className="absolute -top-4 -left-4 w-4 h-4 border-t-2 border-l-2 border-white/40" />
               <div className="absolute -top-4 -right-4 w-4 h-4 border-t-2 border-r-2 border-white/40" />
               <div className="absolute -bottom-4 -left-4 w-4 h-4 border-b-2 border-l-2 border-white/40" />
               <div className="absolute -bottom-4 -right-4 w-4 h-4 border-b-2 border-r-2 border-white/40" />
 
-              {/* Orbital Data Overlay */}
-              <div className="absolute -right-24 top-0 flex flex-col items-start gap-1 text-[8px] font-bold tracking-widest opacity-40 uppercase">
+              {/* Orbital Data Overlay - Moved further left for alignment */}
+              <div className="absolute -left-40 top-0 flex flex-col items-end gap-1 text-[8px] font-bold tracking-widest opacity-40 uppercase text-right">
                 <div className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 bg-white animate-pulse" />
                   <span>Lunar_Pos: 384.4k_km</span>
+                  <div className="w-1.5 h-1.5 bg-white animate-pulse" />
                 </div>
                 <div>Phase: Waxing_Gibbous</div>
                 <div>Sync: 99.2%</div>
