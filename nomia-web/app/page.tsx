@@ -363,6 +363,14 @@ export default function NomiaLanding() {
             </div>
           </div>
           <div className="flex flex-col justify-end items-end space-y-8 text-right">
+            {/* Moon Hologram with Parallax Resonance */}
+            <div className="w-32 h-32 md:w-48 md:h-48 relative overflow-hidden parallax-bg">
+              <img
+                src="/decoration/hologram_moon.gif"
+                alt="Moon Hologram"
+                className="w-full h-full object-contain grayscale opacity-60 dim-glow-animation"
+              />
+            </div>
             <h3 className="text-6xl font-black tracking-tighter leading-none">FLY ME <br />TO THE MOON</h3>
             <div className="h-2 w-full bg-white/30" />
             <p className="text-xs uppercase tracking-[1em] opacity-40">Everything Return To Nothingness</p>
