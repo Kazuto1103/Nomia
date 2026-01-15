@@ -10,6 +10,35 @@ interface LoadingScreenProps {
 }
 
 
+// Helper for Decoding/Typing Effect
+function ScrambleText({ text, delay = 0, speed = 1 }: { text: string, delay?: number, speed?: number }) {
+    const [display, setDisplay] = useState("");
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";
+
+    useEffect(() => {
+        let iterations = 0;
+        const interval = setInterval(() => {
+            setDisplay(text.split("").map((char, index) => {
+                if (index < iterations) {
+                    return text[index];
+                }
+                return chars[Math.floor(Math.random() * chars.length)];
+            }).join(""));
+
+            if (iterations >= text.length) {
+                clearInterval(interval);
+            }
+            iterations += 1 / 3; // Speed of decode
+        }, 30);
+
+        // Start delay
+        const startTimeout = setTimeout(() => { iterations = 0; }, delay * 1000);
+        return () => { clearInterval(interval); clearTimeout(startTimeout); };
+    }, [text, delay]);
+
+    return <span className="font-mono">{display}</span>;
+}
+
 // Helper Component for Curved Text - Optimized with MotionValues & Scalable
 function TextRing({ radius, text, rotation, opacity, scale, loop = true, letterSpacing = 0.3, fontSize = 10 }: { radius: number, text: string, rotation: any, opacity: number, scale?: any, loop?: boolean, letterSpacing?: number, fontSize?: number }) {
     // Generate a unique ID for the path to avoid conflicts
@@ -336,25 +365,46 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                         ))}
 
 
-                        {/* STATUS TEXT - Appears last */}
-                        <motion.div variants={itemVariants} className="absolute bottom-24 flex flex-col items-center font-mono tracking-[0.5em]">
-                            <motion.span
-                                animate={{ opacity: [0.3, 1, 0.3] }}
-                                transition={{ repeat: Infinity, duration: 2 }}
-                                className="text-[10px] text-white/50 mb-4"
-                            >
-                                [ HOLD_TO_AUTHORIZE_SYSTEM_HANDSHAKE ]
-                            </motion.span>
+                        {/* STATUS TEXT - REDESIGN: Bottom Fixed Bar & Left Text */}
+                        <motion.div
+                            variants={itemVariants}
+                            className="absolute bottom-0 left-0 w-full z-[60]"
+                        >
+                            {/* Text Container - Above the bar, Left Aligned */}
+                            <div className="flex flex-col items-start justify-end pb-4 pl-10 md:pl-16">
+                                {/* Row 1: Protocol Header */}
+                                <div
+                                    className="text-[10px] md:text-[12px] text-white font-bold tracking-[0.25em] mb-1"
+                                    style={{ textShadow: "0 0 10px rgba(255,255,255,0.6)" }}
+                                >
+                                    <ScrambleText text="[ SYSTEM_HANDSHAKE_PROTOCOL ]" delay={0.5} speed={0.5} />
+                                </div>
 
-                            <div className="w-64 h-[2px] bg-white/10 relative overflow-hidden">
-                                <motion.div
-                                    className="absolute inset-0 bg-white"
-                                    style={{ width: progressWidth }}
-                                />
+                                {/* Row 2: Instruction & Sync Stats (Horizontal Layout for cleanness) */}
+                                <div className="flex items-center space-x-6 text-[9px] md:text-[10px] text-white/70 font-mono tracking-[0.15em]">
+                                    <div className="flex items-center">
+                                        <span className="text-white/40 mr-2">CMD:</span>
+                                        <ScrambleText text="HOLD_CLICK_TO_AUTHORIZE" delay={1.2} speed={0.8} />
+                                        <motion.span
+                                            animate={{ opacity: [0, 1, 0] }}
+                                            transition={{ repeat: Infinity, duration: 0.8 }}
+                                            className="inline-block w-1.5 h-3 bg-white ml-2 align-middle"
+                                        />
+                                    </div>
+
+                                    <div className="flex items-center">
+                                        <span className="text-white/40 mr-2">SYNC:</span>
+                                        <span ref={textRef} className="text-white" style={{ textShadow: "0 0 5px rgba(255,255,255,0.5)" }}>0.0%</span>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div className="mt-2 text-[8px] text-white/30" ref={textRef}>
-                                PROXIMITY_SYNC: 0.0%
+                            {/* Full Width Progressive Line - Stuck to bottom */}
+                            <div className="w-full h-[2px] bg-white/10 relative">
+                                <motion.div
+                                    className="absolute top-0 left-0 h-full bg-white shadow-[0_0_20px_rgba(255,255,255,0.8)]"
+                                    style={{ width: progressWidth }}
+                                />
                             </div>
                         </motion.div>
                     </div>
