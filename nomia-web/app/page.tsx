@@ -72,9 +72,37 @@ export default function NomiaLanding() {
         });
       });
 
-      // Special animation for Layer 4 & 5 (Propaganda)
-      gsap.to(".propaganda-scroll", {
-        xPercent: -20,
+      // L4: CINEMATIC NARRATIVE PARALLAX
+      const l4Blocks = layer4Ref.current?.querySelectorAll(".parallax-fragment");
+      l4Blocks?.forEach((block, i) => {
+        const speed = (i % 2 === 0) ? -100 : 100;
+        gsap.to(block, {
+          y: speed,
+          ease: "none",
+          scrollTrigger: {
+            trigger: block,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          }
+        });
+      });
+
+      // L4: Technical Line Growth
+      gsap.from(".l4-technical-line", {
+        scaleX: 0,
+        transformOrigin: "left center",
+        scrollTrigger: {
+          trigger: layer4Ref.current,
+          start: "top 60%",
+          end: "top 20%",
+          scrub: 1,
+        }
+      });
+
+      // Special animation for Layer 4 Horizontal Scrolling
+      gsap.to(".propaganda-scroll-l4", {
+        xPercent: -30,
         scrollTrigger: {
           trigger: layer4Ref.current,
           start: "top bottom",
@@ -349,26 +377,114 @@ export default function NomiaLanding() {
         </div>
       </section>
 
-      {/* LAYER 4: PROPAGANDA I */}
-      <section ref={layer4Ref} className="relative z-20 py-64 h-screen overflow-hidden bg-white text-black flex items-center">
-        <div className="propaganda-scroll flex gap-20 whitespace-nowrap">
+      {/* LAYER 4: CINEMATIC NARRATIVE OVERHAUL (SYSTEM_DATA_SMOG) */}
+      <section ref={layer4Ref} className="relative z-20 min-h-[220vh] bg-white text-black py-48 overflow-hidden flex flex-col">
+        {/* Background Narrative Smog (Parallax Numbers) - Senior Designer Touch */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.03] select-none font-black text-[30vw] leading-none flex flex-wrap gap-20 overflow-hidden">
+          <span>09</span><span>21</span><span>88</span><span>00</span><span>44</span><span>12</span><span>67</span>
+        </div>
+
+        {/* Top Marquee (Cinematic Speed) */}
+        <div className="propaganda-scroll-l4 flex gap-20 whitespace-nowrap mb-48 opacity-90 border-y-2 border-black py-4">
           {[...Array(5)].map((_, i) => (
-            <h2 key={i} className="text-[18vh] font-black tracking-tighter leading-none">
-              NOMIA // DANGER // PROTOCOL // Dystopian.Industrial.Automated. //
+            <h2 key={i} className="text-[8vh] font-black tracking-tighter leading-none">
+              NARRATIVE_FRAGMENT_ARCHIVE // NOMIA_CORE // SYSTEM_OVERRIDE // 0X_DATA_BLEED //
             </h2>
           ))}
         </div>
-        <div className="absolute inset-0 flex flex-col justify-between p-12 pointer-events-none">
-          <div className="flex justify-between uppercase font-black text-4xl">
-            <span className="vertical-text">WARNING_SYSTEM</span>
-            <span className="vertical-text">DATA_CORRUPTION</span>
+
+        <div className="relative z-10 w-full max-w-screen-xl mx-auto px-6 md:px-20 space-y-96">
+
+          {/* NARRATIVE NODE 01: NEON SMOG */}
+          <div className="flex flex-col md:flex-row gap-20 items-start">
+            <div className="reveal-content flex flex-col parallax-fragment">
+              <div className="text-[12rem] font-black leading-none tracking-tighter opacity-10 -ml-12 mb-[-6rem]">01</div>
+              <div className="max-w-md border-l-4 border-black pl-8 space-y-8">
+                <p className="text-2xl font-black leading-tight uppercase">
+                  Neon flickers against slick, oil-stained pavement, casting rhythmic shadows over crowds tethered to pulsating wrist-interfaces.
+                </p>
+                <div className="l4-technical-line h-[1px] w-full bg-black opacity-20" />
+                <p className="text-sm font-bold opacity-60 leading-relaxed uppercase">
+                  Towering monolithic screens broadcast synthetic smiles and mandatory updates, drowning out the hollow hum of ventilation shafts that circulate recycled, metallic air.
+                </p>
+              </div>
+            </div>
+
+            <div className="reveal-content md:mt-96 max-w-sm parallax-fragment ml-auto">
+              <div className="p-8 border-2 border-black flex flex-col gap-6">
+                <div className="text-xs font-black tracking-[0.5em] bg-black text-white px-3 py-1 self-start">DATA_STREAM_A</div>
+                <p className="text-lg font-bold leading-snug uppercase">
+                  Data streams bleed into the atmosphere like invisible smog, harvesting every whispered thought and fleeting pulse for the insatiable appetite of the central grid.
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="flex justify-between uppercase font-black text-4xl">
-            <span className="vertical-text">REPLICANT_DETECTED</span>
-            <span className="vertical-text">CORE_STABILITY_0X00</span>
+
+          {/* NARRATIVE NODE 02: THE VOID */}
+          <div className="flex flex-col md:flex-row-reverse gap-20 items-end">
+            <div className="reveal-content flex flex-col items-end text-right parallax-fragment">
+              <div className="text-[12rem] font-black leading-none tracking-tighter opacity-10 -mr-12 mb-[-6rem]">02</div>
+              <div className="max-w-md border-r-4 border-black pr-8 space-y-8">
+                <p className="text-3xl font-black leading-none tracking-tighter uppercase italic">
+                  In this vertical maze of steel and silicon, the distinction between organic life and programmed simulation dissolves into a singular, cold efficiency.
+                </p>
+                <div className="l4-technical-line h-[1px] w-full bg-black opacity-20 origin-right" />
+              </div>
+            </div>
+
+            <div className="reveal-content md:mb-64 max-w-md parallax-fragment">
+              <div className="space-y-6">
+                <ShieldAlert className="w-12 h-12" />
+                <p className="text-2xl font-black leading-tight uppercase">
+                  Gleaming chrome towers pierce the perpetual haze of a dying sky, casting long, oppressive shadows over the decaying ruins of the old world.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* NARRATIVE NODE 03: THE DRONE */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-32">
+            <div className="reveal-content space-y-12 parallax-fragment">
+              <div className="flex items-center gap-4">
+                <div className="w-2 h-2 bg-black rounded-full animate-pulse" />
+                <span className="text-xs font-black tracking-widest">REALTIME_FEED: RECOVERED_DATA</span>
+              </div>
+              <p className="text-xl font-bold leading-relaxed opacity-80 uppercase text-justify">
+                Below the gleaming surface, tangled webs of frayed wires and leaking conduits hiss with the frantic energy of a civilization sustained by life-support algorithms. Silence is a forgotten relic, replaced by the persistent drone of surveillance drones and the soft chime of credits being deducted for every breath taken.
+              </p>
+            </div>
+
+            <div className="reveal-content flex flex-col justify-center items-center parallax-fragment">
+              <div className="relative p-12 bg-black text-white w-full max-w-sm">
+                <div className="absolute -top-4 -right-4 w-12 h-12 border-t-2 border-r-2 border-black" />
+                <p className="text-3xl font-black tracking-tighter uppercase leading-none italic">
+                  Reality is filtered through cracked lenses and flickering holograms...
+                </p>
+                <p className="mt-8 text-[10px] font-bold tracking-[0.4em] opacity-40">
+                  SYSTEM_DISSOLUTION // NOMIA_CORE
+                </p>
+              </div>
+              <p className="mt-6 text-[10px] font-black tracking-[0.2em] max-w-[200px] text-center opacity-40 uppercase">
+                Leaving only a sterile, digitized husk where a vibrant world once thrived.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Cinematic Vertical Accents */}
+        <div className="absolute top-0 bottom-0 left-[10%] w-[1px] bg-black/5" />
+        <div className="absolute top-0 bottom-0 left-[12%] w-[1px] bg-black/5" />
+
+        {/* Nomia Signature Overlay */}
+        <div className="absolute inset-0 flex flex-col justify-between p-12 pointer-events-none opacity-10">
+          <div className="flex justify-between items-start font-black text-[1vw] tracking-[1em]">
+            <span className="vertical-text">PHANTOM_OS_ARCHIVE</span>
+            <span className="vertical-text">PROTOCOL_DRESSAGE</span>
           </div>
         </div>
       </section>
+
 
       {/* LAYER 5: PROPAGANDA II (DENSE QUOTES) */}
       <section ref={layer5Ref} className="relative z-20 py-48 bg-black overflow-hidden">
@@ -521,6 +637,6 @@ export default function NomiaLanding() {
         }
       `}</style>
 
-    </main>
+    </main >
   );
 }
