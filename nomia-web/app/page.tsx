@@ -202,11 +202,11 @@ export default function NomiaLanding() {
           <div className="hud-tagline mt-16 max-w-3xl text-center space-y-8 hud-flicker">
 
             <p className="text-lg md:text-2xl font-bold tracking-tighter uppercase glow-text">
-              REDEFINING INDUSTRIAL AUTOMATION
+              UNMANNED EFFICIENCY.
             </p>
             <div className="h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent" />
             <p className="text-xs opacity-40 leading-relaxed tracking-[0.3em] uppercase max-w-xl mx-auto">
-              6-layer dashboard ecosystem designed for machine control and narrative exploration.
+              As long as the Sun, the Moon, and the Earth exist, everything will be fine.
             </p>
           </div>
         </div>
