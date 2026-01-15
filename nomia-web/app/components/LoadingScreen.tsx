@@ -157,24 +157,26 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
             opacity: 1,
             transition: {
                 when: "beforeChildren",
-                staggerChildren: 0.15 // 0.15s delay between layers
+                staggerChildren: 0.12, // Slightly tighter stagger
+                duration: 1.5,
+                ease: [0.16, 1, 0.3, 1] // Custom "Dreamy" Bezier
             }
         },
         exit: {
             opacity: 0,
             scale: 1.05, // Subtle expansion for "breath" effect, not warp
-            filter: "blur(4px)", // Less blur, more motion smear feeling
-            transition: { duration: 0.8, ease: "easeIn" }
+            filter: "blur(10px)", // Less blur, more motion smear feeling
+            transition: { duration: 0.8, ease: "easeInOut" }
         }
     } as const;
 
     const itemVariants = {
-        hidden: { opacity: 0, scale: 0.8, filter: "blur(10px)" },
+        hidden: { opacity: 0, scale: 0.92, filter: "blur(8px)" }, // Less movement, more fade-in
         visible: {
             opacity: 1,
             scale: 1,
             filter: "blur(0px)",
-            transition: { duration: 0.8, ease: "circOut" }
+            transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } // Matching Bezier
         }
     } as const;
 
