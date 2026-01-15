@@ -137,8 +137,8 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                             {/* Core Dot */}
                             <motion.div
                                 animate={{
-                                    scale: isPressed ? [1, 1.2, 1] : 1,
-                                    backgroundColor: progress >= 100 ? "#fff" : "transparent"
+                                    scale: isPressed ? [1, 1.5, 1] : 1,
+                                    backgroundColor: progress >= 100 ? "#ffffff" : "rgba(255, 255, 255, 0)"
                                 }}
                                 transition={{ repeat: Infinity, duration: 0.5 }}
                                 className="w-4 h-4 rounded-full border-2 border-white shadow-[0_0_20px_rgba(255,255,255,0.5)]"

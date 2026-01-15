@@ -7,14 +7,14 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Cpu, ArrowRight, Activity, Terminal, ShieldAlert, Info, Zap, AlertTriangle, Database } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import MechaTechSpecs from "./components/MechaTechSpecs";
 import ScrollDecoration from "./components/ScrollDecoration";
 import ModeSelector from "./components/ModeSelector";
 import dynamic from "next/dynamic";
 
 const FloatingWarpSystem = dynamic(() => import("./components/FloatingWarpSystem"), { ssr: false });
 const LoadingScreen = dynamic(() => import("./components/LoadingScreen"), { ssr: false });
-import Lenis from "lenis";
+const MechaTechSpecs = dynamic(() => import("./components/MechaTechSpecs"), { ssr: false });
+
 
 // Register GSAP Plugins
 if (typeof window !== "undefined") {
@@ -47,35 +47,41 @@ export default function NomiaLanding() {
       layers.forEach((layer, i) => {
         if (!layer) return;
 
-        // Staggered reveal for each layer
-        gsap.from(layer.querySelectorAll(".reveal-content"), {
-          y: 50,
-          opacity: 0,
-          stagger: 0.1,
-          scrollTrigger: {
-            trigger: layer,
-            start: "top 80%",
-            toggleActions: "play none none reverse",
-          }
-        });
+        // Safe Check: Reveal Content
+        const revealElements = layer.querySelectorAll(".reveal-content");
+        if (revealElements.length > 0) {
+          gsap.from(revealElements, {
+            y: 50,
+            opacity: 0,
+            stagger: 0.1,
+            scrollTrigger: {
+              trigger: layer,
+              start: "top 80%",
+              toggleActions: "play none none reverse",
+            }
+          });
+        }
 
         // Parallax depth for background elements in layers
-        gsap.to(layer.querySelector(".parallax-bg"), {
-          yPercent: 20,
-          ease: "none",
-          scrollTrigger: {
-            trigger: layer,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          }
-        });
+        const parallaxBg = layer.querySelector(".parallax-bg");
+        if (parallaxBg) {
+          gsap.to(parallaxBg, {
+            yPercent: 20,
+            ease: "none",
+            scrollTrigger: {
+              trigger: layer,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true, // Direct mapping (no smoothing) to fix jitter
+            }
+          });
+        }
       });
 
       // L4: CINEMATIC NARRATIVE PARALLAX
       const l4Blocks = layer4Ref.current?.querySelectorAll(".parallax-fragment");
       l4Blocks?.forEach((block, i) => {
-        const speed = (i % 2 === 0) ? -100 : 100;
+        const speed = (i % 2 === 0) ? -50 : 50;
         gsap.to(block, {
           y: speed,
           ease: "none",
@@ -83,7 +89,7 @@ export default function NomiaLanding() {
             trigger: block,
             start: "top bottom",
             end: "bottom top",
-            scrub: true,
+            scrub: true, // Direct mapping (no smoothing) to fix jitter
           }
         });
       });
@@ -96,7 +102,7 @@ export default function NomiaLanding() {
           trigger: layer4Ref.current,
           start: "top 60%",
           end: "top 20%",
-          scrub: 1,
+          scrub: true, // Direct mapping
         }
       });
 
@@ -120,7 +126,7 @@ export default function NomiaLanding() {
           trigger: layer5Ref.current,
           start: "top bottom",
           end: "bottom top",
-          scrub: 1.5,
+          scrub: true,
         }
       });
 
@@ -132,7 +138,7 @@ export default function NomiaLanding() {
           trigger: layer5Ref.current,
           start: "top center",
           end: "bottom center",
-          scrub: 2,
+          scrub: true,
         }
       });
 
@@ -190,24 +196,7 @@ export default function NomiaLanding() {
     return () => ctx.revert();
   }, [handshakeComplete]);
 
-  useEffect(() => {
-    if (!handshakeComplete) return;
 
-    const lenis = new Lenis({
-      duration: 1.5,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: "vertical",
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
-    ScrollTrigger.refresh();
-    return () => lenis.destroy();
-  }, [handshakeComplete]);
 
   const navigateToTerminal = () => {
     setIsNavigating(true);
@@ -224,7 +213,7 @@ export default function NomiaLanding() {
     <main ref={containerRef} className="relative bg-black text-white font-mono selection:bg-white selection:text-black overflow-x-hidden">
 
       {/* GLOBAL ATMOSPHERIC LAYERS */}
-      <div className="atmospheric-bg fixed inset-0 z-0 pointer-events-none opacity-30 overflow-hidden">
+      <div className="atmospheric-bg fixed inset-0 z-0 pointer-events-none opacity-30 overflow-hidden gpu-accelerate">
         <video autoPlay loop muted playsInline className="w-full h-full object-cover grayscale opacity-80">
           <source src="/decoration/bg_decoration.mp4" type="video/mp4" />
         </video>
@@ -378,42 +367,42 @@ export default function NomiaLanding() {
       </section>
 
       {/* LAYER 4: CINEMATIC NARRATIVE OVERHAUL (SYSTEM_DATA_SMOG) */}
-      <section ref={layer4Ref} className="relative z-20 min-h-[220vh] bg-white text-black py-48 overflow-hidden flex flex-col">
+      <section ref={layer4Ref} className="relative z-20 min-h-screen md:min-h-[220vh] bg-white text-black py-24 md:py-48 overflow-hidden flex flex-col">
         {/* Background Narrative Smog (Parallax Numbers) - Senior Designer Touch */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.03] select-none font-black text-[30vw] leading-none flex flex-wrap gap-20 overflow-hidden">
           <span>09</span><span>21</span><span>88</span><span>00</span><span>44</span><span>12</span><span>67</span>
         </div>
 
         {/* Top Marquee (Cinematic Speed) */}
-        <div className="propaganda-scroll-l4 flex gap-20 whitespace-nowrap mb-48 opacity-90 border-y-2 border-black py-4">
+        <div className="propaganda-scroll-l4 flex gap-10 md:gap-20 whitespace-nowrap mb-24 md:mb-48 opacity-90 border-y-2 border-black py-4">
           {[...Array(5)].map((_, i) => (
-            <h2 key={i} className="text-[8vh] font-black tracking-tighter leading-none">
+            <h2 key={i} className="text-[6vh] md:text-[8vh] font-black tracking-tighter leading-none">
               NARRATIVE_FRAGMENT_ARCHIVE // NOMIA_CORE // SYSTEM_OVERRIDE // 0X_DATA_BLEED //
             </h2>
           ))}
         </div>
 
-        <div className="relative z-10 w-full max-w-screen-xl mx-auto px-6 md:px-20 space-y-96">
+        <div className="relative z-10 w-full max-w-screen-xl mx-auto px-6 md:px-20 space-y-32 md:space-y-96">
 
           {/* NARRATIVE NODE 01: NEON SMOG */}
-          <div className="flex flex-col md:flex-row gap-20 items-start">
+          <div className="flex flex-col md:flex-row gap-12 md:gap-20 items-start">
             <div className="reveal-content flex flex-col parallax-fragment">
-              <div className="text-[12rem] font-black leading-none tracking-tighter opacity-10 -ml-12 mb-[-6rem]">01</div>
+              <div className="text-[6rem] md:text-[12rem] font-black leading-none tracking-tighter opacity-10 -ml-4 md:-ml-12 mb-[-2rem] md:mb-[-6rem]">01</div>
               <div className="max-w-md border-l-4 border-black pl-8 space-y-8">
-                <p className="text-2xl font-black leading-tight uppercase">
+                <p className="text-xl md:text-2xl font-black leading-tight uppercase">
                   Neon flickers against slick, oil-stained pavement, casting rhythmic shadows over crowds tethered to pulsating wrist-interfaces.
                 </p>
                 <div className="l4-technical-line h-[1px] w-full bg-black opacity-20" />
-                <p className="text-sm font-bold opacity-60 leading-relaxed uppercase">
+                <p className="text-xs md:text-sm font-bold opacity-60 leading-relaxed uppercase">
                   Towering monolithic screens broadcast synthetic smiles and mandatory updates, drowning out the hollow hum of ventilation shafts that circulate recycled, metallic air.
                 </p>
               </div>
             </div>
 
-            <div className="reveal-content md:mt-96 max-w-sm parallax-fragment ml-auto">
+            <div className="reveal-content md:mt-96 max-w-sm parallax-fragment md:ml-auto">
               <div className="p-8 border-2 border-black flex flex-col gap-6">
                 <div className="text-xs font-black tracking-[0.5em] bg-black text-white px-3 py-1 self-start">DATA_STREAM_A</div>
-                <p className="text-lg font-bold leading-snug uppercase">
+                <p className="text-sm md:text-lg font-bold leading-snug uppercase">
                   Data streams bleed into the atmosphere like invisible smog, harvesting every whispered thought and fleeting pulse for the insatiable appetite of the central grid.
                 </p>
               </div>
@@ -421,11 +410,11 @@ export default function NomiaLanding() {
           </div>
 
           {/* NARRATIVE NODE 02: THE VOID */}
-          <div className="flex flex-col md:flex-row-reverse gap-20 items-end">
+          <div className="flex flex-col md:flex-row-reverse gap-12 md:gap-20 items-end">
             <div className="reveal-content flex flex-col items-end text-right parallax-fragment">
-              <div className="text-[12rem] font-black leading-none tracking-tighter opacity-10 -mr-12 mb-[-6rem]">02</div>
+              <div className="text-[6rem] md:text-[12rem] font-black leading-none tracking-tighter opacity-10 -mr-4 md:-mr-12 mb-[-2rem] md:mb-[-6rem]">02</div>
               <div className="max-w-md border-r-4 border-black pr-8 space-y-8">
-                <p className="text-3xl font-black leading-none tracking-tighter uppercase italic">
+                <p className="text-xl md:text-3xl font-black leading-none tracking-tighter uppercase italic">
                   In this vertical maze of steel and silicon, the distinction between organic life and programmed simulation dissolves into a singular, cold efficiency.
                 </p>
                 <div className="l4-technical-line h-[1px] w-full bg-black opacity-20 origin-right" />
@@ -435,7 +424,7 @@ export default function NomiaLanding() {
             <div className="reveal-content md:mb-64 max-w-md parallax-fragment">
               <div className="space-y-6">
                 <ShieldAlert className="w-12 h-12" />
-                <p className="text-2xl font-black leading-tight uppercase">
+                <p className="text-xl md:text-2xl font-black leading-tight uppercase">
                   Gleaming chrome towers pierce the perpetual haze of a dying sky, casting long, oppressive shadows over the decaying ruins of the old world.
                 </p>
               </div>
@@ -443,21 +432,21 @@ export default function NomiaLanding() {
           </div>
 
           {/* NARRATIVE NODE 03: THE DRONE */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-32">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-32">
             <div className="reveal-content space-y-12 parallax-fragment">
               <div className="flex items-center gap-4">
                 <div className="w-2 h-2 bg-black rounded-full animate-pulse" />
                 <span className="text-xs font-black tracking-widest">REALTIME_FEED: RECOVERED_DATA</span>
               </div>
-              <p className="text-xl font-bold leading-relaxed opacity-80 uppercase text-justify">
+              <p className="text-lg md:text-xl font-bold leading-relaxed opacity-80 uppercase text-justify">
                 Below the gleaming surface, tangled webs of frayed wires and leaking conduits hiss with the frantic energy of a civilization sustained by life-support algorithms. Silence is a forgotten relic, replaced by the persistent drone of surveillance drones and the soft chime of credits being deducted for every breath taken.
               </p>
             </div>
 
             <div className="reveal-content flex flex-col justify-center items-center parallax-fragment">
-              <div className="relative p-12 bg-black text-white w-full max-w-sm">
+              <div className="relative p-8 md:p-12 bg-black text-white w-full max-w-sm">
                 <div className="absolute -top-4 -right-4 w-12 h-12 border-t-2 border-r-2 border-black" />
-                <p className="text-3xl font-black tracking-tighter uppercase leading-none italic">
+                <p className="text-xl md:text-3xl font-black tracking-tighter uppercase leading-none italic">
                   Reality is filtered through cracked lenses and flickering holograms...
                 </p>
                 <p className="mt-8 text-[10px] font-bold tracking-[0.4em] opacity-40">
@@ -478,7 +467,7 @@ export default function NomiaLanding() {
 
         {/* Nomia Signature Overlay */}
         <div className="absolute inset-0 flex flex-col justify-between p-12 pointer-events-none opacity-10">
-          <div className="flex justify-between items-start font-black text-[1vw] tracking-[1em]">
+          <div className="flex justify-between items-start font-black text-[2vw] md:text-[1vw] tracking-[0.5em] md:tracking-[1em]">
             <span className="vertical-text">PHANTOM_OS_ARCHIVE</span>
             <span className="vertical-text">PROTOCOL_DRESSAGE</span>
           </div>
@@ -635,8 +624,15 @@ export default function NomiaLanding() {
         .dim-glow-animation {
           animation: dim-glow 4s ease-in-out infinite;
         }
+        /* MASTER PROMPT: HARDWARE ACCELERATION */
+        .gpu-accelerate {
+          transform: translate3d(0, 0, 0);
+          will-change: transform;
+          backface-visibility: hidden;
+        }
       `}</style>
 
     </main >
   );
 }
+
