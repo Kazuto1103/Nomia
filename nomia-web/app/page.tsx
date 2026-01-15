@@ -366,7 +366,7 @@ export default function NomiaLanding() {
             {/* Moon Hologram with Parallax Resonance */}
             <div className="w-32 h-32 md:w-48 md:h-48 relative overflow-hidden parallax-bg">
               <img
-                src="/decoration/hologram_moon.gif"
+                src="/decoration/hologram_moon2.gif"
                 alt="Moon Hologram"
                 className="w-full h-full object-contain grayscale opacity-60 dim-glow-animation"
               />
