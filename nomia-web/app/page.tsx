@@ -14,6 +14,7 @@ import dynamic from "next/dynamic";
 const FloatingWarpSystem = dynamic(() => import("./components/FloatingWarpSystem"), { ssr: false });
 const LoadingScreen = dynamic(() => import("./components/LoadingScreen"), { ssr: false });
 const MechaTechSpecs = dynamic(() => import("./components/MechaTechSpecs"), { ssr: false });
+const FleetRegistry = dynamic(() => import("./components/FleetRegistry"), { ssr: false });
 
 
 // Register GSAP Plugins
@@ -255,77 +256,8 @@ export default function NomiaLanding() {
       </section>
 
       {/* LAYER 2: FLEET REGISTRY */}
-      <section ref={layer2Ref} className="relative z-20 py-48 px-6 md:px-20 border-b border-white/5 bg-black/40 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto reveal-content">
-          <div className="mb-32 flex justify-between items-end border-b border-white/10 pb-12">
-            <div>
-              <h2 className="text-6xl font-black tracking-tighter">FLEET_REGISTRY</h2>
-              <p className="text-xs tracking-[0.5em] opacity-30 mt-4">PHANTOM_CLASS_UNITS_ONLY</p>
-            </div>
-            <div className="text-right">
-              <p className="text-[10px] tracking-widest opacity-40">U_ID</p>
-              <p className="text-4xl font-mono">RG_TOTAL</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* V1-RG (ACTIVE) */}
-            <div
-              onClick={() => router.push("/robots/v1-rg")}
-              className="group relative min-h-[400px] border border-white/10 bg-black/60 overflow-hidden invert-logic cursor-pointer p-8 flex flex-col justify-between"
-            >
-              <div className="flex justify-between items-start">
-                <Cpu className="w-12 h-12 opacity-40" />
-                <div className="text-right">
-                  <div className="text-[10px] tracking-widest bg-white/10 px-2 py-1 mb-2">STATUS: ONLINE</div>
-                  <div className="text-[8px] opacity-50 font-mono">0x2F3A1B</div>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-4xl font-black tracking-tighter mb-4">V1-RG</h3>
-                <p className="text-[10px] opacity-60 leading-relaxed font-sans max-w-sm uppercase">
-                  Autonomous exploration unit with ultra-proximity sensors and real-time telemetry uplink.
-                </p>
-              </div>
-
-              <div className="flex items-center justify-between pt-8 border-t border-white/10">
-                <button onClick={(e) => { e.stopPropagation(); setShowTechSpecs(true); }} className="flex items-center gap-3 text-[8px] tracking-[0.4em] uppercase hover:underline">
-                  <Database className="w-4 h-4" /> [ VIEW_blueprints ]
-                </button>
-                <ArrowRight className="w-6 h-6" />
-              </div>
-            </div>
-
-            {/* K4ZU Variation */}
-            <div className="relative min-h-[400px] border border-white/5 bg-black/20 p-8 flex flex-col justify-between opacity-40 grayscale group hover:opacity-100 transition-all border-dashed">
-              <div className="flex justify-between items-start">
-                <ShieldAlert className="w-12 h-12 opacity-20" />
-                <div className="text-right text-[8px] opacity-50 font-mono">ENC_SYS_0X1</div>
-              </div>
-              <div className="text-center py-12">
-                <h3 className="text-3xl font-black tracking-tighter mb-2">K4ZU</h3>
-                <p className="text-[8px] tracking-[0.6em] uppercase opacity-40">Heavy Combat Variation</p>
-                <div className="mt-4 inline-block px-3 py-1 border border-white/20 text-[8px]">ENCRYPTED</div>
-              </div>
-              <div className="pt-8 border-t border-white/5 text-[8px] tracking-widest opacity-20">ACCESS_DENIED</div>
-            </div>
-
-            {/* ZN-01 Variation */}
-            <div className="relative min-h-[400px] border border-white/5 bg-black/20 p-8 flex flex-col justify-between opacity-40 grayscale group hover:opacity-100 transition-all border-dashed">
-              <div className="flex justify-between items-start">
-                <Activity className="w-12 h-12 opacity-20" />
-                <div className="text-right text-[8px] opacity-50 font-mono">ENC_SYS_0X2</div>
-              </div>
-              <div className="text-center py-12">
-                <h3 className="text-3xl font-black tracking-tighter mb-2">ZN-01</h3>
-                <p className="text-[8px] tracking-[0.6em] uppercase opacity-40">Stealth Recon Unit</p>
-                <div className="mt-4 inline-block px-3 py-1 border border-white/20 text-[8px]">WAIT_LIST</div>
-              </div>
-              <div className="pt-8 border-t border-white/5 text-[8px] tracking-widest opacity-20">ACCESS_DENIED</div>
-            </div>
-          </div>
-        </div>
+      <section ref={layer2Ref} className="relative z-20 py-24 md:py-48 px-6 md:px-20 border-b border-white/5 bg-black/60 backdrop-blur-[20px] backdrop-brightness-50 min-h-screen flex items-center">
+        <FleetRegistry />
       </section>
 
       {/* LAYER 3: TECHNICAL BLUEPRINTS */}
