@@ -15,7 +15,7 @@ const FloatingWarpSystem = dynamic(() => import("./components/FloatingWarpSystem
 const LoadingScreen = dynamic(() => import("./components/LoadingScreen"), { ssr: false });
 const MechaTechSpecs = dynamic(() => import("./components/MechaTechSpecs"), { ssr: false });
 const FleetRegistry = dynamic(() => import("./components/FleetRegistry"), { ssr: false });
-const SmartCursor = dynamic(() => import("./components/SmartCursor"), { ssr: false });
+
 
 
 // Register GSAP Plugins
@@ -213,7 +213,7 @@ export default function NomiaLanding() {
 
   return (
     <main ref={containerRef} className="relative bg-black text-white font-mono selection:bg-white selection:text-black overflow-x-hidden">
-      <SmartCursor />
+
 
       {/* GLOBAL ATMOSPHERIC LAYERS */}
       <div className="atmospheric-bg fixed inset-0 z-0 pointer-events-none opacity-30 overflow-hidden gpu-accelerate">
@@ -242,7 +242,6 @@ export default function NomiaLanding() {
 
           <h1
             className="text-9xl md:text-[12vw] font-black leading-none tracking-tighter mix-blend-difference glow-text hud-flicker-main"
-            data-cursor="CORE_SYSTEM"
           >
             NOMIA
           </h1>
@@ -265,7 +264,7 @@ export default function NomiaLanding() {
 
         {/* L1->L2 VERTICAL UMBILICAL (Connector) */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 h-24 w-px bg-gradient-to-b from-white/0 via-white/40 to-white/0" />
-        <div className="absolute top-24 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black border border-white/20 px-2 py-1 text-[8px] tracking-[0.2em] text-white/50 uppercase" data-cursor="STATUS_OK">
+        <div className="absolute top-24 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black border border-white/20 px-2 py-1 text-[8px] tracking-[0.2em] text-white/50 uppercase">
           Sys_Handshake_Complete
         </div>
 
@@ -524,7 +523,7 @@ export default function NomiaLanding() {
           <ShieldAlert className="w-12 h-12 mx-auto" />
           <h2 className="text-[6vw] font-black tracking-tighter leading-none">PHANTOM_TERMINAL</h2>
           <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
-            <button onClick={navigateToTerminal} className="border-[3px] border-black px-8 py-4 text-sm font-black tracking-widest hover:bg-black hover:text-white transition-all invert-logic">
+            <button onClick={navigateToTerminal} className="border-[3px] border-black px-8 py-4 text-sm font-black tracking-widest hover:bg-black hover:text-white transition-all invert-logic" data-cursor="PRESS">
               [ INITIALIZE_TERMINAL ]
             </button>
             <div className="text-left md:border-l-[3px] border-black pl-8 flex items-center">

@@ -118,12 +118,12 @@ export default function FleetRegistry() {
 
                 // Highlight border if center
                 if (absPos < 0.5) {
-                    card.classList.add('border-white/80', 'shadow-[0_0_50px_rgba(255,255,255,0.2)]');
+                    card.classList.add('border-white/80', 'shadow-[0_0_50px_rgba(255,255,255,0.2)]', 'is-center');
                     card.classList.remove('border-white/20');
                     const spinner = document.getElementById(`spinner-${i}`);
                     if (spinner) spinner.classList.add('animate-spin-slow');
                 } else {
-                    card.classList.remove('border-white/80', 'shadow-[0_0_50px_rgba(255,255,255,0.2)]');
+                    card.classList.remove('border-white/80', 'shadow-[0_0_50px_rgba(255,255,255,0.2)]', 'is-center');
                     card.classList.add('border-white/20');
                     const spinner = document.getElementById(`spinner-${i}`);
                     if (spinner) spinner.classList.remove('animate-spin-slow');
@@ -222,6 +222,7 @@ export default function FleetRegistry() {
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
                 onPointerLeave={handlePointerUp}
+                data-cursor="DRAG"
             >
                 {/* Luminescent Glow for Background Atmosphere */}
                 <div className="absolute inset-0 bg-blue-500/10 blur-[100px] rounded-full opacity-20 pointer-events-none" />
@@ -237,36 +238,39 @@ export default function FleetRegistry() {
                                     absolute w-[320px] h-[450px]
                                     bg-black border border-white/20
                                     flex flex-col justify-between p-8
-                                    select-none pointer-events-none
+                                    select-none pointer-events-auto
                                     backdrop-blur-md will-change-transform
+                                    group transition-colors duration-300
+                                    [&.is-center]:hover:bg-white [&.is-center]:hover:text-black [&.is-center]:hover:border-white
+                                    [&.is-center]:hover:shadow-[0_0_80px_rgba(255,255,255,0.4)]
                                 `}
                                 style={{ transformStyle: "preserve-3d" }}
                             >
                                 {/* Holographic Header */}
-                                <div className="flex justify-between items-start border-b border-white/10 pb-4">
-                                    <Icon className={`w-8 h-8 ${robot.color} opacity-80`} />
+                                <div className="flex justify-between items-start border-b border-white/10 pb-4 group-[.is-center]:group-hover:border-black/20 transition-colors duration-300">
+                                    <Icon className={`w-8 h-8 ${robot.color} opacity-80 group-[.is-center]:group-hover:text-black transition-colors duration-300`} />
                                     <div className="text-[10px] text-right space-y-1">
-                                        <div className="tracking-widest opacity-50">CLASS: {robot.class}</div>
-                                        <div className={`font-bold tracking-widest ${robot.status === 'ONLINE' ? 'text-green-500' : 'text-white/40'}`}>
+                                        <div className="tracking-widest opacity-50 group-[.is-center]:group-hover:opacity-100 group-[.is-center]:group-hover:text-black/60">CLASS: {robot.class}</div>
+                                        <div className={`font-bold tracking-widest ${robot.status === 'ONLINE' ? 'text-green-500' : 'text-white/40'} group-[.is-center]:group-hover:text-black`}>
                                             [{robot.status}]
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Wireframe Model Placeholder */}
-                                <div className="flex-1 flex items-center justify-center my-4 opacity-60">
-                                    <div id={`spinner-${i}`} className={`w-32 h-32 border border-dashed text-white/20 rounded-full flex items-center justify-center transition-all duration-500`}>
-                                        <div className="w-20 h-20 border border-dotted border-white/40 rounded-full" />
+                                <div className="flex-1 flex items-center justify-center my-4 opacity-60 group-[.is-center]:group-hover:opacity-100 transition-opacity duration-300">
+                                    <div id={`spinner-${i}`} className={`w-32 h-32 border border-dashed text-white/20 rounded-full flex items-center justify-center transition-all duration-500 group-[.is-center]:group-hover:border-black/20`}>
+                                        <div className="w-20 h-20 border border-dotted border-white/40 rounded-full group-[.is-center]:group-hover:border-black/40" />
                                     </div>
                                 </div>
 
                                 {/* Footer Info */}
                                 <div>
-                                    <h3 className="text-4xl font-black tracking-tighter mb-2">{robot.name}</h3>
-                                    <p className="text-[9px] uppercase tracking-widest opacity-50 leading-relaxed">
+                                    <h3 className="text-4xl font-black tracking-tighter mb-2 group-[.is-center]:group-hover:text-black transition-colors duration-300">{robot.name}</h3>
+                                    <p className="text-[9px] uppercase tracking-widest opacity-50 leading-relaxed group-[.is-center]:group-hover:text-black/70 group-[.is-center]:group-hover:font-medium transition-colors duration-300">
                                         {robot.desc}
                                     </p>
-                                    <div className="mt-4 flex justify-between items-center text-[8px] opacity-30">
+                                    <div className="mt-4 flex justify-between items-center text-[8px] opacity-30 group-[.is-center]:group-hover:opacity-100 group-[.is-center]:group-hover:text-black/50 transition-all duration-300">
                                         <span>ID: {robot.id}_SYS</span>
                                         <ArrowRight className="w-4 h-4" />
                                     </div>
@@ -324,7 +328,7 @@ export default function FleetRegistry() {
                     <button
                         onClick={handleDeploy}
                         className="mt-8 border border-white px-8 py-4 text-sm font-bold tracking-[0.3em] hover:bg-white hover:text-black transition-all uppercase flex items-center gap-4 group w-fit"
-                        data-cursor="DEPLOY_UNIT"
+                        data-cursor="PRESS"
                     >
                         [ DEPLOY_UNIT ]
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />

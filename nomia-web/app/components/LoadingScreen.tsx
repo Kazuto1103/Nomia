@@ -222,7 +222,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                     onMouseUp={() => setIsPressed(false)}
                     onTouchStart={() => setIsPressed(true)}
                     onTouchEnd={() => setIsPressed(false)}
-                    data-cursor="PRESS_TO_INIT"
+                    data-cursor="PRESS"
                 >
                     {/* Background Dynamic Video */}
                     <motion.div variants={itemVariants} className="absolute inset-0 z-0 opacity-20 grayscale pointer-events-none overflow-hidden" style={{ willChange: "transform", transform: "translate3d(0,0,0)" }}>
