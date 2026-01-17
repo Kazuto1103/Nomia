@@ -217,7 +217,7 @@ export default function FleetRegistry() {
         >
             {/* LEFT: HOLO-DECK (Physics Carousel) */}
             <div
-                className="holo-interact-zone w-full md:w-1/2 h-[600px] relative perspective-1000 flex items-center justify-center cursor-grab active:cursor-grabbing touch-none"
+                className="holo-interact-zone w-full md:w-1/2 h-[600px] relative perspective-1000 flex items-center justify-center touch-none"
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
@@ -324,6 +324,7 @@ export default function FleetRegistry() {
                     <button
                         onClick={handleDeploy}
                         className="mt-8 border border-white px-8 py-4 text-sm font-bold tracking-[0.3em] hover:bg-white hover:text-black transition-all uppercase flex items-center gap-4 group w-fit"
+                        data-cursor="DEPLOY_UNIT"
                     >
                         [ DEPLOY_UNIT ]
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />

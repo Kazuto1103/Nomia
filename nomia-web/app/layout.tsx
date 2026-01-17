@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "./components/SmoothScroll";
-import CustomCursor from "./components/CustomCursor";
+import SmartCursor from "./components/SmartCursor";
+import { CursorProvider } from "./context/CursorContext";
 
 
 const inter = Inter({
@@ -30,10 +31,12 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-black text-white overflow-x-hidden`}
       >
-        <SmoothScroll>
-          <CustomCursor />
-          {children}
-        </SmoothScroll>
+        <CursorProvider>
+          <SmoothScroll>
+            {children}
+          </SmoothScroll>
+          <SmartCursor />
+        </CursorProvider>
 
       </body>
     </html>
