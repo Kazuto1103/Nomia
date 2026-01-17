@@ -61,17 +61,22 @@ export default function FleetRegistry() {
 
             // 1. Physics: Spring/Lerp Position to Target
             if (!s.isDragging) {
-                // ROULETTE PHYSICS (Ultra-Low Friction)
-                // 0.99 makes it slide like ice/roulette wheel
-                s.velocity *= 0.99;
+                // ROULETTE PHYSICS (Balanced)
+                // 0.95 provides a smooth glide that settles predictably
+                s.velocity *= 0.95;
                 s.target += s.velocity;
 
                 // 2. Snap-to-Center (Magnetism)
-                // Only snap when effectively stopped
-                if (Math.abs(s.velocity) < 0.001) {
+                // Engage when momentum slows down to ensure we land ON a card
+                if (Math.abs(s.velocity) < 0.05) {
                     const snapTarget = Math.round(s.target);
-                    // Very gentle final settlement
-                    s.target += (snapTarget - s.target) * 0.05;
+                    const dist = snapTarget - s.target;
+
+                    // Smooth visual landing
+                    s.target += dist * 0.1;
+
+                    // Kill residual velocity if very close
+                    if (Math.abs(dist) < 0.001) s.velocity = 0;
                 }
             }
 
@@ -170,17 +175,15 @@ export default function FleetRegistry() {
         if (!container) return;
 
         const handleWheel = (e: WheelEvent) => {
+            // IGNORE Vertical Scroll (Let the page scroll naturally)
+            if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) return;
+
+            // Handle Horizontal Scroll / Swipe
             e.preventDefault();
-            // Wheel adds to velocity/target directly
-            // Increased scale for better sensitivity on trackpads
+
             const wheelScale = 0.003;
-
-            // Sum interactions: Horizontal swipe OR Vertical scroll both drive the rotation
-            // This ensures ANY scrolling movement (X or Y) contributes to the flow
-            const delta = (e.deltaX || 0) + (e.deltaY || 0);
-
-            state.current.target += delta * wheelScale;
-            state.current.velocity += delta * wheelScale * 0.1; // Add momentum
+            state.current.target += e.deltaX * wheelScale;
+            state.current.velocity += e.deltaX * wheelScale * 0.1;
         };
 
         const leftPanel = container.querySelector(".holo-interact-zone");
