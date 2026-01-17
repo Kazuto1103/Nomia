@@ -256,8 +256,35 @@ export default function NomiaLanding() {
       </section>
 
       {/* LAYER 2: FLEET REGISTRY */}
-      <section ref={layer2Ref} className="relative z-20 py-24 md:py-48 px-6 md:px-20 border-b border-white/5 bg-black/60 backdrop-blur-[20px] backdrop-brightness-50 min-h-screen flex items-center">
+      <section ref={layer2Ref} className="relative z-20 py-24 md:py-48 px-6 md:px-20 border-b border-white/5 bg-black/60 backdrop-blur-[20px] backdrop-brightness-50 min-h-screen flex items-center justify-center overflow-hidden">
+
+        {/* L1->L2 VERTICAL UMBILICAL (Connector) */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 h-24 w-px bg-gradient-to-b from-white/0 via-white/40 to-white/0" />
+        <div className="absolute top-24 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black border border-white/20 px-2 py-1 text-[8px] tracking-[0.2em] text-white/50 uppercase">
+          Sys_Handshake_Complete
+        </div>
+
+        {/* BACKGROUND TEXTURE (Grid) */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none"
+          style={{ backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)', backgroundSize: '50px 50px' }}>
+        </div>
+
+        {/* CORNER BRACKETS (HUD) */}
+        <div className="absolute top-10 left-10 w-8 h-8 border-t border-l border-white/30" />
+        <div className="absolute top-10 right-10 w-8 h-8 border-t border-r border-white/30" />
+        <div className="absolute bottom-10 left-10 w-8 h-8 border-b border-l border-white/30" />
+        <div className="absolute bottom-10 right-10 w-8 h-8 border-b border-r border-white/30" />
+
         <FleetRegistry />
+
+        {/* L2->L3 TRANSITION (Marquee) */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden py-2 bg-white/5 border-t border-white/10">
+          <div className="whitespace-nowrap animate-marquee text-[10px] tracking-[0.5em] text-white/30 font-bold flex gap-8">
+            {[...Array(10)].map((_, i) => (
+              <span key={i}>WARNING: RESTRICTED_SECTOR // AUTHORIZED_PERS_ONLY // 0xAF92 //</span>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* LAYER 3: TECHNICAL BLUEPRINTS */}
