@@ -15,6 +15,7 @@ const FloatingWarpSystem = dynamic(() => import("./components/FloatingWarpSystem
 const LoadingScreen = dynamic(() => import("./components/LoadingScreen"), { ssr: false });
 const MechaTechSpecs = dynamic(() => import("./components/MechaTechSpecs"), { ssr: false });
 const FleetRegistry = dynamic(() => import("./components/FleetRegistry"), { ssr: false });
+const TechnicalBlueprint = dynamic(() => import("./components/TechnicalBlueprint"), { ssr: false });
 
 
 
@@ -292,40 +293,19 @@ export default function NomiaLanding() {
       </section>
 
       {/* LAYER 3: TECHNICAL BLUEPRINTS */}
-      <section ref={layer3Ref} className="relative z-20 py-48 px-6 border-b border-white/5 bg-black">
-        <div className="reveal-content max-w-7xl mx-auto flex flex-col md:flex-row gap-20 items-center">
-          <div className="w-full md:w-1/2 relative">
-            <div className="absolute -inset-10 bg-white/5 blur-3xl rounded-full" />
-            <div className="relative border border-white/20 p-4 aspect-square flex items-center justify-center overflow-hidden">
-              <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-screen">
-                <source src="/decoration/hologram_overlay2.mp4" type="video/mp4" />
-              </video>
-              <Zap className="w-64 h-64 text-white opacity-10 animate-pulse" />
-              <div className="absolute top-0 left-0 w-full h-full border border-white/5 grid grid-cols-12 grid-rows-12">
-                {[...Array(144)].map((_, i) => (
-                  <div key={i} className="border-[0.5px] border-white/5" />
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="w-full md:w-1/2 space-y-12">
-            <div className="inline-block border border-white px-6 py-2">
+      <section ref={layer3Ref} className="relative z-20 py-24 md:py-48 px-6 border-b border-white/5 bg-black">
+        <div className="reveal-content max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="mb-16 text-center space-y-4">
+            <div className="inline-block border border-white px-6 py-2 mb-4">
               <span className="text-xs font-bold tracking-[1em] uppercase">TECH_ANALYSIS</span>
             </div>
-            <h2 className="text-5xl font-black tracking-tighter leading-none">SENSOR_GRID & <br /> CORE_LOGIC</h2>
-            <div className="grid grid-cols-2 gap-8 text-[10px] font-mono opacity-50">
-              <div className="space-y-4">
-                <p>LIDAR: ENABLED [360deg]</p>
-                <p>PROXIMITY: SONY_PX90</p>
-                <p>UPLINK: 400.2MHz</p>
-              </div>
-              <div className="space-y-4">
-                <p>OS: NOMIA_V3_DEV</p>
-                <p>KERNEL: 0x99281</p>
-                <p>THREADS: OPTIMIZED</p>
-              </div>
-            </div>
+            <h2 className="text-4xl md:text-5xl font-black tracking-tighter leading-none">
+              SYSTEM_ARCHITECTURE <br /> <span className="opacity-50 text-2xl md:text-3xl">EXPLODED_VIEW // V1-RG</span>
+            </h2>
           </div>
+
+          <TechnicalBlueprint />
         </div>
       </section>
 
