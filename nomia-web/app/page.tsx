@@ -422,11 +422,11 @@ export default function NomiaLanding() {
       {/* LAYER 5: PROPAGANDA II (DENSE QUOTES) */}
       <section ref={layer5Ref} className="relative z-20 py-48 bg-black overflow-hidden">
         {/* Layer 5 Background Decoration - Mirrored & Right Aligned */}
-        <div className="absolute -top-[20%] -bottom-[20%] inset-x-0 z-0 pointer-events-none opacity-20 parallax-bg overflow-hidden">
+        <div className="absolute -top-[10%] -bottom-[10%] inset-x-0 z-0 pointer-events-none opacity-20 parallax-bg overflow-hidden">
           <img
             src="/decoration/bg_decoration_eva.jpeg"
             alt="EVA Decoration"
-            className="w-full h-full object-cover grayscale dim-glow-animation scale-x-[-1] object-right-top"
+            className="w-full h-full object-cover grayscale dim-glow-animation scale-x-[-1] object-right"
           />
         </div>
 
