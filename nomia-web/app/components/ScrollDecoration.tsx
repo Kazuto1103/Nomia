@@ -15,36 +15,36 @@ export default function ScrollDecoration() {
     });
 
     // BOX 1: Base layer (Rear-most)
-    const box1Opacity = useTransform(smoothProgress, [0.05, 0.15, 0.8, 0.9], [0, 0.4, 0.4, 0]);
-    const box1X = useTransform(smoothProgress, [0.05, 0.15, 0.8, 0.9], [150, 0, 0, 150]);
-    const box1Y = useTransform(smoothProgress, [0.05, 0.15, 0.8, 0.9], [0, 0, 0, 0]);
-    const box1Scale = useTransform(smoothProgress, [0.05, 0.15, 0.8, 0.9], [0.5, 0.9, 0.9, 0.5]);
+    const box1Opacity = useTransform(smoothProgress, [0.38, 0.45, 0.75, 0.85], [0, 0.4, 0.4, 0]);
+    const box1X = useTransform(smoothProgress, [0.38, 0.45, 0.75, 0.85], [150, 0, 0, 150]);
+    const box1Y = useTransform(smoothProgress, [0.38, 0.45, 0.75, 0.85], [0, 0, 0, 0]);
+    const box1Scale = useTransform(smoothProgress, [0.38, 0.45, 0.75, 0.85], [0.5, 0.9, 0.9, 0.5]);
 
     // BOX 2: Offset 1
-    const box2Opacity = useTransform(smoothProgress, [0.1, 0.2, 0.75, 0.85], [0, 0.6, 0.6, 0]);
-    const box2X = useTransform(smoothProgress, [0.1, 0.2, 0.75, 0.85], [150, 15, 15, 150]);
-    const box2Y = useTransform(smoothProgress, [0.1, 0.2, 0.75, 0.85], [0, 15, 15, 0]);
-    const box2Scale = useTransform(smoothProgress, [0.1, 0.2, 0.75, 0.85], [0.5, 0.95, 0.95, 0.5]);
+    const box2Opacity = useTransform(smoothProgress, [0.40, 0.47, 0.73, 0.83], [0, 0.6, 0.6, 0]);
+    const box2X = useTransform(smoothProgress, [0.40, 0.47, 0.73, 0.83], [150, 15, 15, 150]);
+    const box2Y = useTransform(smoothProgress, [0.40, 0.47, 0.73, 0.83], [0, 15, 15, 0]);
+    const box2Scale = useTransform(smoothProgress, [0.40, 0.47, 0.73, 0.83], [0.5, 0.95, 0.95, 0.5]);
 
     // BOX 3: Offset 2
-    const box3Opacity = useTransform(smoothProgress, [0.15, 0.25, 0.7, 0.8], [0, 0.8, 0.8, 0]);
-    const box3X = useTransform(smoothProgress, [0.15, 0.25, 0.7, 0.8], [150, 30, 30, 150]);
-    const box3Y = useTransform(smoothProgress, [0.15, 0.25, 0.7, 0.8], [0, 30, 30, 0]);
-    const box3Scale = useTransform(smoothProgress, [0.15, 0.25, 0.7, 0.8], [0.5, 1, 1, 0.5]);
+    const box3Opacity = useTransform(smoothProgress, [0.42, 0.49, 0.71, 0.81], [0, 0.8, 0.8, 0]);
+    const box3X = useTransform(smoothProgress, [0.42, 0.49, 0.71, 0.81], [150, 30, 30, 150]);
+    const box3Y = useTransform(smoothProgress, [0.42, 0.49, 0.71, 0.81], [0, 30, 30, 0]);
+    const box3Scale = useTransform(smoothProgress, [0.42, 0.49, 0.71, 0.81], [0.5, 1, 1, 0.5]);
 
     // BOX 4 (TOP): Front-most
-    const box4Opacity = useTransform(smoothProgress, [0.2, 0.3, 0.65, 0.75], [0, 1, 1, 0]);
-    const box4X = useTransform(smoothProgress, [0.2, 0.3, 0.65, 0.75], [150, 45, 45, 150]);
-    const box4Y = useTransform(smoothProgress, [0.2, 0.3, 0.65, 0.75], [0, 45, 45, 0]);
-    const box4Scale = useTransform(smoothProgress, [0.2, 0.3, 0.65, 0.75], [0.5, 1.05, 1.05, 0.5]);
+    const box4Opacity = useTransform(smoothProgress, [0.44, 0.51, 0.69, 0.79], [0, 1, 1, 0]);
+    const box4X = useTransform(smoothProgress, [0.44, 0.51, 0.69, 0.79], [150, 45, 45, 150]);
+    const box4Y = useTransform(smoothProgress, [0.44, 0.51, 0.69, 0.79], [0, 45, 45, 0]);
+    const box4Scale = useTransform(smoothProgress, [0.44, 0.51, 0.69, 0.79], [0.5, 1.05, 1.05, 0.5]);
 
     // TYPEWRITER TRIGGER
     const [shouldType, setShouldType] = useState(false);
     useEffect(() => {
         const unsubscribe = smoothProgress.on("change", (latest) => {
-            if (latest > 0.3 && latest < 0.65) {
+            if (latest > 0.42 && latest < 0.70) {
                 setShouldType(true);
-            } else if (latest < 0.2 || latest > 0.75) {
+            } else if (latest < 0.35 || latest > 0.80) {
                 setShouldType(false);
             }
         });

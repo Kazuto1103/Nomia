@@ -16,6 +16,7 @@ const LoadingScreen = dynamic(() => import("./components/LoadingScreen"), { ssr:
 const MechaTechSpecs = dynamic(() => import("./components/MechaTechSpecs"), { ssr: false });
 const FleetRegistry = dynamic(() => import("./components/FleetRegistry"), { ssr: false });
 const TechnicalBlueprint = dynamic(() => import("./components/TechnicalBlueprint"), { ssr: false });
+const FixedHUD = dynamic(() => import("./components/FixedHUD"), { ssr: false });
 
 
 
@@ -296,7 +297,7 @@ export default function NomiaLanding() {
       <section ref={layer3Ref} className="relative z-20 py-24 md:py-48 px-6 border-b border-white/5 bg-black">
         <div className="reveal-content max-w-7xl mx-auto">
           {/* Header */}
-          <div className="mb-16 text-center space-y-4">
+          <div className="mb-6 text-center space-y-4">
             <div className="inline-block border border-white px-6 py-2 mb-4">
               <span className="text-xs font-bold tracking-[1em] uppercase">TECH_ANALYSIS</span>
             </div>
@@ -520,15 +521,10 @@ export default function NomiaLanding() {
         </div>
       </section>
 
-      {/* FIXED HUD COMPONENTS */}
-      <div className="fixed top-8 left-8 z-[60] mix-blend-difference pointer-events-none opacity-50">
-        <div className="text-[8px] tracking-[1em]">SYSTEM_UPTIME: 99:21:44</div>
-      </div>
-      <div className="fixed bottom-8 left-8 z-[60] mix-blend-difference pointer-events-none opacity-50">
-        <div className="text-[8px] tracking-[1em]">LAT: 35.6895 LON: 139.6917</div>
-      </div>
+
 
       {/* POPUPS & DECORATIONS */}
+      <FixedHUD />
       <MechaTechSpecs isOpen={showTechSpecs} onClose={() => setShowTechSpecs(false)} />
       <ScrollDecoration />
       <ModeSelector isOpen={showModeSelector} onClose={() => setShowModeSelector(false)} />
