@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "./components/SmoothScroll";
 import SmartCursor from "./components/ui/SmartCursor";
+import ScrollProgress from "./components/ScrollProgress";
 import { CursorProvider } from "./context/CursorContext";
 
 
@@ -36,6 +37,7 @@ export default function RootLayout({
             {children}
           </SmoothScroll>
           <SmartCursor />
+          <ScrollProgress />
         </CursorProvider>
 
       </body>

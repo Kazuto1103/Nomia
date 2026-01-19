@@ -116,6 +116,20 @@ body {
   border-width: 1px;
 }
 
+/* Hide Native Scrollbar */
+html,
+body,
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 .noise-overlay {
   background-image: url('https://grainy-gradients.vercel.app/noise.svg');
   background-repeat: repeat;
