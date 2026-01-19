@@ -4,6 +4,7 @@ import "./globals.css";
 import SmoothScroll from "./components/SmoothScroll";
 import SmartCursor from "./components/ui/SmartCursor";
 import { CursorProvider } from "./context/CursorContext";
+import AtmosphereController from "./components/AtmosphereController";
 
 
 const inter = Inter({
@@ -32,6 +33,7 @@ export default function RootLayout({
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-black text-white overflow-x-hidden cursor-none`}
       >
         <CursorProvider>
+          <AtmosphereController />
           <SmoothScroll>
             {children}
           </SmoothScroll>
