@@ -213,11 +213,7 @@ export default function NomiaLanding() {
   }
 
   return (
-    <main ref={containerRef} className="relative bg-black text-white font-mono selection:bg-white selection:text-black overflow-x-hidden">
-
-
-      {/* GLOBAL ATMOSPHERIC LAYERS */}
-      {/* ATMOSPHERE MOVED TO CONTROLLER */}
+    <main ref={containerRef} className="relative bg-transparent text-white font-mono selection:bg-white selection:text-black overflow-x-hidden">
 
 
 
@@ -227,7 +223,8 @@ export default function NomiaLanding() {
       </div>
 
       {/* LAYER 1: THE CORE (IDENTITY) */}
-      <section ref={layer1Ref} data-layer="1" className="layer-border relative z-20 min-h-screen flex flex-col items-center justify-center p-6 border-b border-white/5">
+      {/* LAYER 1: THE CORE (IDENTITY) */}
+      <section id="scene-1" ref={layer1Ref} className="layer-border relative z-20 min-h-screen flex flex-col items-center justify-center p-6 border-b border-white/5">
         <div className="reveal-content flex flex-col items-center">
           <div className="hud-tagline mb-8 flex items-center gap-6 opacity-30">
             <span className="h-[1px] w-24 bg-white"></span>
@@ -255,7 +252,8 @@ export default function NomiaLanding() {
       </section>
 
       {/* LAYER 2: FLEET REGISTRY */}
-      <section ref={layer2Ref} data-layer="2" className="relative z-20 py-24 md:py-48 px-6 md:px-20 border-b border-white/5 bg-black/60 backdrop-blur-[20px] backdrop-brightness-50 min-h-screen flex items-center justify-center overflow-hidden">
+      {/* LAYER 2: FLEET REGISTRY */}
+      <section id="scene-2" ref={layer2Ref} className="relative z-20 py-24 md:py-48 px-6 md:px-20 border-b border-white/5 bg-black/60 backdrop-blur-[20px] backdrop-brightness-50 min-h-screen flex items-center justify-center overflow-hidden">
 
         {/* L1->L2 VERTICAL UMBILICAL (Connector) */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 h-24 w-px bg-gradient-to-b from-white/0 via-white/40 to-white/0" />
@@ -287,7 +285,8 @@ export default function NomiaLanding() {
       </section>
 
       {/* LAYER 3: TECHNICAL BLUEPRINTS */}
-      <section ref={layer3Ref} data-layer="3" className="relative z-20 py-24 md:py-48 px-6 border-b border-white/5 bg-black">
+      {/* LAYER 3: TECHNICAL BLUEPRINTS */}
+      <section id="scene-3" ref={layer3Ref} className="relative z-20 py-24 md:py-48 px-6 border-b border-white/5 bg-transparent">
         <div className="reveal-content max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-16 text-center space-y-4">
@@ -304,7 +303,8 @@ export default function NomiaLanding() {
       </section>
 
       {/* LAYER 4: CINEMATIC NARRATIVE OVERHAUL (SYSTEM_DATA_SMOG) */}
-      <section ref={layer4Ref} data-layer="4" className="relative z-20 min-h-screen md:min-h-[220vh] bg-white text-black py-24 md:py-48 overflow-hidden flex flex-col">
+      {/* LAYER 4: CINEMATIC NARRATIVE OVERHAUL (SYSTEM_DATA_SMOG) */}
+      <section id="scene-4" ref={layer4Ref} className="relative z-20 min-h-screen md:min-h-[220vh] bg-transparent text-black py-24 md:py-48 overflow-hidden flex flex-col">
         {/* Background Narrative Smog (Parallax Numbers) - Senior Designer Touch */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.03] select-none font-black text-[30vw] leading-none flex flex-wrap gap-20 overflow-hidden">
           <span>09</span><span>21</span><span>88</span><span>00</span><span>44</span><span>12</span><span>67</span>
@@ -413,7 +413,8 @@ export default function NomiaLanding() {
 
 
       {/* LAYER 5: PROPAGANDA II (DENSE QUOTES) */}
-      <section ref={layer5Ref} data-layer="5" className="relative z-20 py-48 bg-black overflow-hidden">
+      {/* LAYER 5: PROPAGANDA II (DENSE QUOTES) */}
+      <section id="scene-5" ref={layer5Ref} className="relative z-20 py-48 bg-transparent overflow-hidden">
         {/* Layer 5 Background Decoration - Mirrored & Right Aligned */}
         <div className="absolute -top-[10%] -bottom-[10%] inset-x-0 z-0 pointer-events-none opacity-20 parallax-bg overflow-hidden">
           <img
@@ -474,23 +475,41 @@ export default function NomiaLanding() {
       </section>
 
       {/* LAYER 6: FOOTER SYSTEM (GATEWAY) */}
-      <section ref={layer6Ref} data-layer="6" className="relative z-20 min-h-screen flex flex-col items-center justify-center bg-black text-white p-12 overflow-hidden">
+      {/* LAYER 6: FOOTER SYSTEM (GATEWAY) */}
+      <section id="scene-6" ref={layer6Ref} className="relative z-20 min-h-screen flex flex-col items-center justify-center bg-transparent text-black p-12 overflow-hidden">
+        {/* Layer 6 Background Inverted */}
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-40 overflow-hidden grayscale invert">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover transition-none"
+            style={{
+              backfaceVisibility: 'hidden',
+              transform: 'translate3d(0,0,0)',
+              perspective: '1000px'
+            }}
+          >
+            <source src="/decoration/hologram_overlay.mp4" type="video/mp4" />
+          </video>
+        </div>
 
         <div className="reveal-content max-w-4xl text-center space-y-10 relative z-10 flex flex-col items-center justify-center min-h-[60vh]">
           <ShieldAlert className="w-12 h-12 mx-auto" />
           <h2 className="text-[6vw] font-black tracking-tighter leading-none">PHANTOM_TERMINAL</h2>
           <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
-            <button onClick={navigateToTerminal} className="border-[3px] border-white px-8 py-4 text-sm font-black tracking-widest hover:bg-white hover:text-black transition-all invert-logic" data-cursor="PRESS">
+            <button onClick={navigateToTerminal} className="border-[3px] border-black px-8 py-4 text-sm font-black tracking-widest hover:bg-black hover:text-white transition-all invert-logic" data-cursor="PRESS">
               [ INITIALIZE_TERMINAL ]
             </button>
-            <div className="text-left md:border-l-[3px] border-white pl-8 flex items-center">
+            <div className="text-left md:border-l-[3px] border-black pl-8 flex items-center">
               <p className="text-[9px] font-bold uppercase tracking-widest leading-relaxed opacity-70">
                 Direct access to experimental robot nodes. <br />
                 Authorization level 05 required.
               </p>
             </div>
           </div>
-          <div className="pt-24 flex justify-between items-center text-[9px] font-black tracking-[0.4em] opacity-40 border-t border-white/10">
+          <div className="pt-24 flex justify-between items-center text-[9px] font-black tracking-[0.4em] opacity-40 border-t border-black/10">
             <span>NOMIA // HUB // V2.0</span>
             <span>© KAZUTO // 2026</span>
           </div>

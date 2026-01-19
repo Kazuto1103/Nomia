@@ -4,8 +4,9 @@ import "./globals.css";
 import SmoothScroll from "./components/SmoothScroll";
 import SmartCursor from "./components/ui/SmartCursor";
 import { CursorProvider } from "./context/CursorContext";
-import AtmosphereController from "./components/AtmosphereController";
 
+
+import CinematicStage from "./components/CinematicStage";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -30,10 +31,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-black text-white overflow-x-hidden cursor-none`}
+        className={`${inter.variable} ${jetbrainsMono.variable} antialiased text-white overflow-x-hidden cursor-none`}
       >
+        <CinematicStage />
         <CursorProvider>
-          <AtmosphereController />
           <SmoothScroll>
             {children}
           </SmoothScroll>
